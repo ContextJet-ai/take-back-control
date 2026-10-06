@@ -107,7 +107,7 @@ export function PlanView({ plan }: { plan: Plan }) {
         <ul className="space-y-3">{plan.support.map((r) => (
           <li key={r.name}>
             <a href={r.url} {...ext} className="font-medium text-accent underline">{r.name}</a>
-            {r.phone && <span className="text-sm text-muted"> {r.phone}</span>}
+            {r.phone && <a href={`tel:${r.phone.replace(/[^+\d]/g, "")}`} className="ml-2 text-sm font-medium text-accent underline">{r.phone}</a>}
             <p className="text-sm text-muted">{r.description}</p>
           </li>
         ))}</ul>
