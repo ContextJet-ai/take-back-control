@@ -1,0 +1,113 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import type { Answers } from "@/lib/plan";
+import { emptyAnswers, loadState, saveState } from "@/lib/wizard-state";
+import { Button } from "@/components/button";
+import { Progress } from "./progress";
+import { Question } from "./question";
+import { PlatformPicker } from "./platform-picker";
+import { CountryPicker } from "./country-picker";
+
+type StepId = "contentType" | "posted" | "platforms" | "selfTaken" | "minor" | "country";
+
+function stepsFor(a: Partial<Answers>): StepId[] {
+  const posted = a.posted === "yes" || a.posted === "unsure";
+  return ["contentType", "posted", ...(posted ? (["platforms"] as StepId[]) : []), "selfTaken", "minor", "country"];
+}
+
+export function Wizard() {
+  const router = useRouter();
+  const [answers, setAnswers] = useState<Partial<Answers>>(emptyAnswers);
+  const [index, setIndex] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [countryTouched, setCountryTouched] = useState(false);
+
+  useEffect(() => {
+    const s = loadState();
+    if (s) {
+      setAnswers({ ...emptyAnswers, ...s.answers });
+      setIndex(Math.min(s.step, stepsFor(s.answers).length - 1));
+    }
+  }, []);
+
+  const steps = stepsFor(answers);
+  const step = steps[Math.min(index, steps.length - 1)];
+  const isLast = index === steps.length - 1;
+
+  const set = <K extends keyof Answers>(k: K, v: Answers[K]) => { setError(null); setAnswers((a) => ({ ...a, [k]: v })); };
+
+  function validate(): string | null {
+    switch (step) {
+      case "contentType": return answers.contentType ? null : "Choose an option to continue.";
+      case "posted": return answers.posted ? null : "Choose an option to continue.";
+      case "platforms": {
+        const sel = answers.platformSlugs ?? [];
+        if (sel.length === 0) return "Choose at least one place.";
+        if (sel.includes("other") && !/^https?:\/\/\S+$/.test(answers.otherUrl ?? "")) return "Paste the full link, starting with https://";
+        return null;
+      }
+      case "selfTaken": return answers.selfTaken ? null : "Choose an option to continue.";
+      case "minor": return answers.minor ? null : "Choose an option to continue.";
+      case "country": return countryTouched || answers.country === null ? null : "Choose a country or skip.";
+    }
+  }
+
+  function next() {
+    const problem = validate();
+    if (problem) { setError(problem); return; }
+    if (isLast) {
+      const full: Answers = {
+        contentType: answers.contentType!, posted: answers.posted!,
+        platformSlugs: answers.platformSlugs ?? [], otherUrl: answers.otherUrl ?? "",
+        selfTaken: answers.selfTaken!, minor: answers.minor!, country: answers.country ?? null,
+      };
+      saveState({ step: 6, answers: full });
+      router.push("/plan");
+      return;
+    }
+    const ni = index + 1;
+    setIndex(ni); saveState({ step: ni, answers });
+  }
+
+  function back() { if (index > 0) { setError(null); setIndex(index - 1); } }
+
+  return (
+    <div key={step} className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-12 motion-safe:animate-[fade_200ms_ease-out]">
+      <Progress step={index + 1} total={steps.length} />
+      {step === "contentType" && (
+        <Question title="What was shared, or threatened?" name="contentType" value={answers.contentType}
+          onChange={(v) => set("contentType", v)}
+          options={[{ value: "image", label: "An image" }, { value: "video", label: "A video" }, { value: "threat", label: "A threat to share something", hint: "Nothing has been posted yet" }]} />
+      )}
+      {step === "posted" && (
+        <Question title="Has it been posted anywhere?" name="posted" value={answers.posted}
+          onChange={(v) => set("posted", v)}
+          options={[{ value: "yes", label: "Yes" }, { value: "threatened", label: "No, but someone is threatening to" }, { value: "unsure", label: "I am not sure" }]} />
+      )}
+      {step === "platforms" && (
+        <PlatformPicker selected={answers.platformSlugs ?? []} otherUrl={answers.otherUrl ?? ""} error={error}
+          onToggle={(slug) => { const cur = answers.platformSlugs ?? []; set("platformSlugs", cur.includes(slug) ? cur.filter((s) => s !== slug) : [...cur, slug]); }}
+          onOtherUrl={(v) => set("otherUrl", v)} />
+      )}
+      {step === "selfTaken" && (
+        <Question title="Did you take the image or video yourself?" name="selfTaken" value={answers.selfTaken}
+          onChange={(v) => set("selfTaken", v)}
+          options={[{ value: "yes", label: "Yes, I took it", hint: "This lets you use copyright law as well" }, { value: "no", label: "No, someone else did" }, { value: "unsure", label: "I am not sure" }]} />
+      )}
+      {step === "minor" && (
+        <Question title="Is anyone in it under 18?" name="minor" value={answers.minor}
+          onChange={(v) => set("minor", v)}
+          options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]} />
+      )}
+      {step === "country" && (
+        <CountryPicker value={answers.country} onChange={(v) => { setCountryTouched(true); set("country", v); }} />
+      )}
+      {error && step !== "platforms" && <p role="alert" className="text-sm text-red-700 dark:text-red-400">{error}</p>}
+      <div className="flex items-center justify-between pt-4">
+        <Button variant="secondary" onClick={back} disabled={index === 0}>Back</Button>
+        <Button onClick={next}>{isLast ? "See my plan" : "Next"}</Button>
+      </div>
+    </div>
+  );
+}
