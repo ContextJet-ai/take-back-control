@@ -5,7 +5,7 @@ export const tiktok: Platform = {
   contentTypes: ["image", "video", "threat"],
   reportUrl: "https://www.tiktok.com/legal/report/privacy",
   steps: [
-    "Open the privacy report form linked above. It works without an account.",
+    "Open the page linked above and press Continue. It redirects to TikTok's report form, which works without an account.",
     "Choose the option for intimate or sexual content shared without consent.",
     "Paste the link to each video. In the app, use Share then Copy link.",
     "Submit and note the reference number in the confirmation email.",
