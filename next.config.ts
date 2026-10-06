@@ -13,6 +13,7 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  turbopack: { rules: { "*.md": { loaders: ["raw-loader"], as: "*.js" } } },
   async headers() {
     return [
       {
