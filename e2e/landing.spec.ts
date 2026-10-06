@@ -4,9 +4,23 @@ test("landing with reduced motion uses static fallbacks", async ({ browser }) =>
   const ctx = await browser.newContext({ reducedMotion: "reduce" });
   const page = await ctx.newPage();
   await page.goto("/");
-  await expect(page.getByTestId("steps-stack")).toHaveAttribute("data-reduced", "true");
+  const stack = page.getByTestId("steps-stack");
+  await expect(stack).toHaveAttribute("data-ready", "true");
+  await expect(stack).toHaveAttribute("data-reduced", "true");
+  await page.getByText("How fingerprinting protects you").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(500);
   await expect(page.getByTestId("hash-static")).toBeVisible();
   await expect(page.locator("canvas")).toHaveCount(0);
+  await ctx.close();
+});
+
+test("landing without reduced motion enables the animated path", async ({ browser }) => {
+  const ctx = await browser.newContext({ reducedMotion: "no-preference" });
+  const page = await ctx.newPage();
+  await page.goto("/");
+  const stack = page.getByTestId("steps-stack");
+  await expect(stack).toHaveAttribute("data-ready", "true");
+  await expect(stack).toHaveAttribute("data-reduced", "false");
   await ctx.close();
 });
 

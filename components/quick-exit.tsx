@@ -18,8 +18,10 @@ export function QuickExit() {
       if (now - lastEsc.current < 800) leaveNow();
       lastEsc.current = now;
     };
+    const onShow = (e: PageTransitionEvent) => { if (e.persisted) { clearState(); window.location.reload(); } };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("pageshow", onShow);
+    return () => { window.removeEventListener("keydown", onKey); window.removeEventListener("pageshow", onShow); };
   }, []);
   return (
     <button

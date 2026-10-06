@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Answers } from "@/lib/plan";
 import { emptyAnswers, loadState, saveState } from "@/lib/wizard-state";
@@ -35,7 +35,18 @@ export function Wizard() {
   const step = steps[Math.min(index, steps.length - 1)];
   const isLast = index === steps.length - 1;
 
-  const set = <K extends keyof Answers>(k: K, v: Answers[K]) => { setError(null); setAnswers((a) => ({ ...a, [k]: v })); };
+  const headingRef = useRef<HTMLDivElement>(null);
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    const h = headingRef.current?.querySelector<HTMLElement>("legend, h2");
+    h?.focus();
+  }, [index]);
+
+  const set = <K extends keyof Answers>(k: K, v: Answers[K]) => {
+    setError(null);
+    setAnswers((a) => { const nextAnswers = { ...a, [k]: v }; saveState({ step: index, answers: nextAnswers }); return nextAnswers; });
+  };
 
   function validate(): string | null {
     switch (step) {
@@ -70,10 +81,10 @@ export function Wizard() {
     setIndex(ni); saveState({ step: ni, answers });
   }
 
-  function back() { if (index > 0) { setError(null); setIndex(index - 1); } }
+  function back() { if (index > 0) { setError(null); setIndex(index - 1); saveState({ step: index - 1, answers }); } }
 
   return (
-    <div key={step} className="mx-auto flex max-w-xl flex-col gap-6 px-4 py-12 motion-safe:animate-[fade_200ms_ease-out]">
+    <div key={step} ref={headingRef} className="mx-auto flex max-w-xl flex-col gap-6 px-4 pb-28 pt-12 motion-safe:animate-[fade_200ms_ease-out]">
       <Progress step={index + 1} total={steps.length} />
       {step === "contentType" && (
         <Question title="What was shared, or threatened?" name="contentType" value={answers.contentType}

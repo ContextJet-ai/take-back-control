@@ -5,7 +5,7 @@ export function Question<V extends string>({ title, name, options, value, onChan
 }) {
   return (
     <fieldset className="flex flex-col gap-3">
-      <legend className="mb-4 text-2xl font-semibold tracking-tight">{title}</legend>
+      <legend tabIndex={-1} className="mb-4 text-2xl font-semibold tracking-tight outline-none">{title}</legend>
       {options.map((o) => (
         <label key={o.value} className={`flex cursor-pointer items-start gap-3 rounded-card border p-4 ${value === o.value ? "border-accent bg-surface" : "border-border"}`}>
           <input type="radio" name={name} value={o.value} checked={value === o.value} onChange={() => onChange(o.value)} className="mt-1 accent-accent" aria-label={o.label} />

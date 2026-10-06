@@ -26,3 +26,11 @@ export function clearState(): void {
   memory = null;
   try { sessionStorage.removeItem(KEY); } catch { /* ignore */ }
 }
+
+const REQUIRED: (keyof Answers)[] = ["contentType", "posted", "platformSlugs", "otherUrl", "selfTaken", "minor", "country"];
+
+export function isCompleteState(s: WizardState | null): s is WizardState & { answers: Answers } {
+  if (!s || s.step < 6 || !s.answers) return false;
+  const a = s.answers as Record<string, unknown>;
+  return REQUIRED.every((k) => k in a) && Array.isArray(a.platformSlugs) && typeof a.otherUrl === "string";
+}

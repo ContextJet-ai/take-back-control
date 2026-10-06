@@ -6,7 +6,7 @@ export function PlatformPicker({ selected, otherUrl, error, onToggle, onOtherUrl
 }) {
   return (
     <fieldset className="flex flex-col gap-3">
-      <legend className="mb-4 text-2xl font-semibold tracking-tight">Where was it posted?</legend>
+      <legend tabIndex={-1} className="mb-4 text-2xl font-semibold tracking-tight outline-none">Where was it posted?</legend>
       <p className="text-sm text-muted">Choose every place you know about.</p>
       {selectablePlatforms.map((p) => (
         <label key={p.slug} className={`flex cursor-pointer items-center gap-3 rounded-card border p-4 ${selected.includes(p.slug) ? "border-accent bg-surface" : "border-border"}`}>
