@@ -50,3 +50,19 @@ describe("Wizard", () => {
     expect(screen.getByText(/taken when you were under 18/i)).toBeTruthy();
   });
 });
+
+describe("country picker", () => {
+  it("lists every EU member and groups them", () => {
+    render(<Wizard />);
+    fireEvent.click(screen.getByLabelText("An image")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("Yes")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("TikTok")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("No, someone else did")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("No")); fireEvent.click(screen.getByText("Next"));
+    const select = screen.getByLabelText("Country") as HTMLSelectElement;
+    const values = Array.from(select.options).map((o) => o.value);
+    for (const c of ["DE", "FR", "IT", "ES", "NL", "PL"]) expect(values).toContain(c);
+    expect(values).toContain("NG");
+    expect(select.querySelectorAll("optgroup").length).toBe(2);
+  });
+});
