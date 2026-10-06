@@ -30,3 +30,12 @@ describe("PlanView", () => {
     expect(block.compareDocumentPosition(screen.getByText("Right now")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 });
+
+describe("PlanView levers", () => {
+  it("renders the legal levers section for a US plan", () => {
+    const plan = buildPlan({ contentType: "image", posted: "yes", platformSlugs: ["x"], otherUrl: "", selfTaken: "no", minor: "no", country: "US" });
+    render(<PlanView plan={plan} />);
+    expect(screen.getByText("Legal levers where you are")).toBeTruthy();
+    expect(screen.getByText(/TAKE IT DOWN Act request/)).toBeTruthy();
+  });
+});

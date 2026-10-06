@@ -1,6 +1,7 @@
 import { getPlatform, searchEngines as allSearchEngines } from "@/content/platforms";
 import { resourcesFor } from "@/content/resources";
-import type { Platform, Resource } from "@/content/types";
+import { leversFor } from "@/content/levers";
+import type { Platform, Resource, Lever } from "@/content/types";
 import type { LetterKind } from "@/content/letters";
 
 export interface Answers {
@@ -26,6 +27,8 @@ export interface Plan {
   prevention: Resource[];
   letters: PlanLetter[];
   support: Resource[];
+  levers: Lever[];
+  regulatorFirst: Lever | null;
 }
 
 export function buildPlan(a: Answers): Plan {
@@ -71,13 +74,18 @@ export function buildPlan(a: Answers): Plan {
     .sort((x, y) => (x.name === "Take It Down" ? -1 : y.name === "Take It Down" ? 1 : 0));
   const support = all.filter((r) => r.kind !== "prevention");
 
+  const levers = leversFor(a.country);
+  const statutory = levers.find((l) => l.letterKind)?.letterKind;
+  const regulatorFirst = levers.find((l) => l.region === "AU") ?? null;
+  const platformKind: LetterKind = statutory ?? "platform-report";
+
   const letters: PlanLetter[] = [];
   for (const p of platforms) {
-    letters.push({ kind: "platform-report", platform: p.name, urls: [] });
+    letters.push({ kind: platformKind, platform: p.name, urls: [] });
     if (!isMinor && a.selfTaken === "yes") letters.push({ kind: "dmca-takedown", platform: p.name, urls: [] });
   }
   if (otherUrl) {
-    letters.push({ kind: "host-abuse", platform: "the hosting provider", urls: [otherUrl] });
+    letters.push({ kind: statutory ?? "host-abuse", platform: "the hosting provider", urls: [otherUrl] });
     if (!isMinor && a.selfTaken === "yes") letters.push({ kind: "dmca-takedown", platform: "the hosting provider", urls: [otherUrl] });
   }
 
@@ -92,5 +100,7 @@ export function buildPlan(a: Answers): Plan {
     prevention,
     letters,
     support,
+    levers,
+    regulatorFirst,
   };
 }

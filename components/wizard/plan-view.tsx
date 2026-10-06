@@ -33,6 +33,13 @@ export function PlanView({ plan }: { plan: Plan }) {
         <p className="text-sm"><Link href="/evidence" className="font-medium text-accent underline">Build an evidence log</Link> with links, dates, and file fingerprints. Nothing is uploaded.</p>
       </Section>
 
+      {plan.regulatorFirst && (
+        <Section title="Report to the regulator first">
+          <p>{plan.regulatorFirst.summary}</p>
+          <a href={plan.regulatorFirst.url} {...ext} className="font-medium text-accent underline">Open {plan.regulatorFirst.name}</a>
+        </Section>
+      )}
+
       {(plan.platforms.length > 0 || plan.otherUrl) && (
         <Section title="Report to platforms">
           {plan.platforms.map((p) => (
@@ -59,6 +66,20 @@ export function PlanView({ plan }: { plan: Plan }) {
           <ul className="space-y-2">{plan.searchEngines.map((p) => (
             <li key={p.slug}><a href={p.reportUrl} {...ext} className="font-medium text-accent underline">{p.name}</a></li>
           ))}</ul>
+        </Section>
+      )}
+
+      {plan.levers.length > 0 && (
+        <Section title="Legal levers where you are">
+          {plan.levers.map((l) => (
+            <div key={l.name} className="rounded-card border border-border p-5">
+              <h3 className="font-semibold">{l.name}</h3>
+              <p className="mt-1 text-sm">{l.summary}</p>
+              {l.deadline && <p className="mt-2 text-sm text-muted">Deadline for the platform: {l.deadline}</p>}
+              {l.url && <a href={l.url} {...ext} className="mt-3 inline-block font-medium text-accent underline">Open</a>}
+              <p className="mt-2 text-xs text-muted">Checked {l.verifiedOn}</p>
+            </div>
+          ))}
         </Section>
       )}
 

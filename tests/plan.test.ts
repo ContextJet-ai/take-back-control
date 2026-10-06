@@ -86,3 +86,28 @@ describe("minor path", () => {
     expect(p.rightNow.some((s) => /report the account to the app/i.test(s) && /CyberTipline/.test(s))).toBe(true);
   });
 });
+
+describe("country levers", () => {
+  it("US posted content uses the TAKE IT DOWN letter instead of the generic one", () => {
+    const p = buildPlan({ ...base, country: "US", platformSlugs: ["x"] });
+    expect(p.letters.map((l) => l.kind)).toEqual(["take-it-down-notice"]);
+    expect(p.levers.some((l) => /TAKE IT DOWN/.test(l.name))).toBe(true);
+  });
+  it("IN uses the grievance letter and keeps DMCA when self-taken", () => {
+    const p = buildPlan({ ...base, country: "IN", selfTaken: "yes", platformSlugs: ["meta"] });
+    expect(p.letters.map((l) => l.kind).sort()).toEqual(["dmca-takedown", "india-grievance"]);
+  });
+  it("AU puts eSafety first", () => {
+    const p = buildPlan({ ...base, country: "AU" });
+    expect(p.regulatorFirst?.name).toMatch(/eSafety/);
+  });
+  it("minor in the US gets the TAKE IT DOWN letter but never DMCA", () => {
+    const p = buildPlan({ ...base, country: "US", minor: "yes", selfTaken: "yes" });
+    expect(p.letters.every((l) => l.kind !== "dmca-takedown")).toBe(true);
+    expect(p.letters.some((l) => l.kind === "take-it-down-notice")).toBe(true);
+  });
+  it("no country means no levers and the generic letter", () => {
+    const p = buildPlan(base);
+    expect(p.levers).toEqual([]); expect(p.letters[0].kind).toBe("platform-report");
+  });
+});
