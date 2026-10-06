@@ -14,7 +14,7 @@ export interface Answers {
   country: string | null;
 }
 
-export interface PlanLetter { kind: LetterKind; platform: string; urls: string[]; email?: string }
+export interface PlanLetter { kind: LetterKind; platform: string; urls: string[]; email?: string; minor?: boolean }
 
 export interface Plan {
   isMinor: boolean;
@@ -74,18 +74,19 @@ export function buildPlan(a: Answers): Plan {
     .sort((x, y) => (x.name === "Take It Down" ? -1 : y.name === "Take It Down" ? 1 : 0));
   const support = all.filter((r) => r.kind !== "prevention");
 
-  const levers = leversFor(a.country);
-  const statutory = levers.find((l) => l.letterKind)?.letterKind;
-  const regulatorFirst = levers.find((l) => l.region === "AU") ?? null;
+  const allLevers = leversFor(a.country);
+  const statutory = allLevers.find((l) => l.letterKind)?.letterKind;
+  const regulatorFirst = allLevers.find((l) => l.region === "AU") ?? null;
+  const levers = allLevers.filter((l) => l !== regulatorFirst);
   const platformKind: LetterKind = statutory ?? "platform-report";
 
   const letters: PlanLetter[] = [];
   for (const p of platforms) {
-    letters.push({ kind: platformKind, platform: p.name, urls: [], email: p.abuseEmail });
+    letters.push({ kind: platformKind, platform: p.name, urls: [], email: p.abuseEmail, minor: isMinor });
     if (!isMinor && a.selfTaken === "yes") letters.push({ kind: "dmca-takedown", platform: p.name, urls: [] });
   }
   if (otherUrl) {
-    letters.push({ kind: statutory ?? "host-abuse", platform: "the hosting provider", urls: [otherUrl] });
+    letters.push({ kind: "host-abuse", platform: "the hosting provider", urls: [otherUrl], minor: isMinor });
     if (!isMinor && a.selfTaken === "yes") letters.push({ kind: "dmca-takedown", platform: "the hosting provider", urls: [otherUrl] });
   }
 

@@ -8,7 +8,7 @@ I am the person shown in the content at the links below. It shows me in a state 
 
 {{urls}}
 
-Under Rule 3(2)(b) you are required to remove or disable access to this content within 24 hours of receiving this complaint, to acknowledge this complaint within 24 hours, and to resolve it within 72 hours. Please confirm removal by email.
+Under Rule 3(2)(b) you are required to remove or disable access to this content within 24 hours of receiving this complaint. Under Rule 3(2)(a) you must acknowledge this complaint within 24 hours and act on it within 72 hours. Please confirm removal by email.
 
 Contact: {{contact}}
 
