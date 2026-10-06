@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { Warning } from "@phosphor-icons/react/dist/ssr";
 import type { Plan } from "@/lib/plan";
 import { LetterCard } from "./letter-card";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-4 border-t border-border pt-8">
+    <section className="flex flex-col gap-4 pt-8">
+      <span className="block h-0.5 w-8 rounded-full bg-accent" aria-hidden="true" />
       <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
       {children}
     </section>
@@ -22,8 +24,8 @@ export function PlanView({ plan }: { plan: Plan }) {
       </header>
 
       {plan.warnings.length > 0 && (
-        <section aria-labelledby="read-first" className="rounded-card border border-accent bg-surface p-5">
-          <h2 id="read-first" className="text-lg font-semibold">Read this first</h2>
+        <section aria-labelledby="read-first" className="rounded-card border border-accent bg-accent-soft p-5">
+          <h2 id="read-first" className="flex items-center gap-2 text-lg font-semibold"><Warning size={20} weight="fill" className="text-accent" aria-hidden="true" />Read this first</h2>
           <ul className="mt-2 list-disc space-y-2 pl-5">{plan.warnings.map((w) => <li key={w}>{w}</li>)}</ul>
         </section>
       )}
@@ -43,11 +45,11 @@ export function PlanView({ plan }: { plan: Plan }) {
       {(plan.platforms.length > 0 || plan.otherUrl) && (
         <Section title="Report to platforms">
           {plan.platforms.map((p) => (
-            <div key={p.slug} className="rounded-card border border-border p-5">
+            <div key={p.slug} className="rounded-card border border-border bg-surface-solid p-5">
               <h3 className="font-semibold">{p.name}</h3>
               <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">{p.steps.map((s) => <li key={s}>{s}</li>)}</ol>
               <p className="mt-3 text-sm text-muted">{p.expectedResponse}</p>
-              <a href={p.reportUrl} {...ext} className="mt-3 inline-block font-medium text-accent underline">Open {p.name}&apos;s report page</a>
+              <a href={p.reportUrl} {...ext} className="mt-4 inline-flex min-h-[44px] items-center rounded-full bg-accent px-5 py-2 text-sm font-medium text-accent-fg hover:brightness-105">Open report page</a>
               <p className="mt-2 text-sm text-muted">If ignored: {p.escalation}</p>
             </div>
           ))}
@@ -72,7 +74,7 @@ export function PlanView({ plan }: { plan: Plan }) {
       {plan.levers.length > 0 && (
         <Section title="Legal levers where you are">
           {plan.levers.map((l) => (
-            <div key={l.name} className="rounded-card border border-border p-5">
+            <div key={l.name} className="rounded-card border border-border bg-surface-solid p-5">
               <h3 className="font-semibold">{l.name}</h3>
               <p className="mt-1 text-sm">{l.summary}</p>
               {l.deadline && <p className="mt-2 text-sm text-muted">Deadline for the platform: {l.deadline}</p>}
@@ -85,7 +87,7 @@ export function PlanView({ plan }: { plan: Plan }) {
 
       <Section title="Stop it spreading">
         {plan.prevention.map((r) => (
-          <div key={r.name} className="rounded-card border border-border p-5">
+          <div key={r.name} className="rounded-card border border-border bg-surface-solid p-5">
             <h3 className="font-semibold">{r.name}</h3>
             <p className="mt-1 text-sm">{r.description}</p>
             <p className="mt-2 text-sm text-muted">The fingerprint is made on your device. The image itself is never sent anywhere.</p>

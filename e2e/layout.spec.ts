@@ -1,0 +1,22 @@
+import { test, expect } from "@playwright/test";
+test("plan page has no horizontal scroll at 375px and buttons do not overlap", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/start");
+  await page.getByLabel("An image").check(); await page.getByText("Next").click();
+  await page.getByLabel("Yes").check(); await page.getByText("Next").click();
+  await page.getByLabel("Another website").check();
+  await page.getByLabel("Paste the link").fill("https://example-with-a-very-long-domain-name-for-testing.com/some/really/long/path/that/keeps/going/and/going?query=1234567890");
+  await page.getByText("Next").click();
+  await page.getByLabel("Yes, I took it").check(); await page.getByText("Next").click();
+  await page.getByLabel("No").check(); await page.getByText("Next").click();
+  await page.getByLabel("Prefer not to say").check(); await page.getByText("See my plan").click();
+  await expect(page).toHaveURL(/\/plan$/);
+  const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+  expect(scrollWidth).toBeLessThanOrEqual(375);
+  await page.evaluate(() => sessionStorage.clear());
+  await page.goto("/start");
+  const next = await page.getByText("Next").boundingBox();
+  const exit = await page.getByRole("button", { name: /quick exit/i }).boundingBox();
+  const overlap = !(next!.x + next!.width < exit!.x || exit!.x + exit!.width < next!.x || next!.y + next!.height < exit!.y || exit!.y + exit!.height < next!.y);
+  expect(overlap).toBe(false);
+});
