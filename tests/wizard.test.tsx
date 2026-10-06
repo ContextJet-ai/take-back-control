@@ -41,4 +41,12 @@ describe("Wizard", () => {
     expect(push).toHaveBeenCalledWith("/plan");
     expect(loadState()?.answers.platformSlugs).toEqual(["tiktok"]);
   });
+  it("explains that the minor question covers images taken under 18", () => {
+    render(<Wizard />);
+    fireEvent.click(screen.getByLabelText("An image")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("Yes")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("TikTok")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("No, someone else did")); fireEvent.click(screen.getByText("Next"));
+    expect(screen.getByText(/taken when you were under 18/i)).toBeTruthy();
+  });
 });

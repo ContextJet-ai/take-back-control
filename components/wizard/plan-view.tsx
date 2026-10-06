@@ -21,6 +21,13 @@ export function PlanView({ plan }: { plan: Plan }) {
         <p className="mt-2 text-muted">Work through it top to bottom. You can come back to this page while this tab is open.</p>
       </header>
 
+      {plan.warnings.length > 0 && (
+        <div role="alert" className="rounded-card border border-accent bg-surface p-5">
+          <h2 className="text-lg font-semibold">Read this first</h2>
+          <ul className="mt-2 list-disc space-y-2 pl-5">{plan.warnings.map((w) => <li key={w}>{w}</li>)}</ul>
+        </div>
+      )}
+
       <Section title="Right now">
         <ol className="list-decimal space-y-2 pl-5">{plan.rightNow.map((s) => <li key={s}>{s}</li>)}</ol>
       </Section>

@@ -21,4 +21,11 @@ describe("PlanView", () => {
     expect(screen.queryByText("Report to platforms")).toBeNull();
     expect(screen.queryByText("Remove from search")).toBeNull();
   });
+  it("renders warnings before everything else for a minor", () => {
+    const plan = buildPlan({ contentType: "image", posted: "yes", platformSlugs: ["meta"], otherUrl: "", selfTaken: "no", minor: "yes", country: null });
+    render(<PlanView plan={plan} />);
+    const alert = screen.getByRole("alert");
+    expect(alert.textContent).toMatch(/do not forward/i);
+    expect(alert.compareDocumentPosition(screen.getByText("Right now")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
 });

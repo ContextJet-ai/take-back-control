@@ -112,7 +112,10 @@ export function Wizard() {
       {step === "minor" && (
         <Question title="Is anyone in it under 18?" name="minor" value={answers.minor}
           onChange={(v) => set("minor", v)}
-          options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]} />
+          options={[
+            { value: "yes", label: "Yes", hint: "Including you, if it was taken when you were under 18, even if you are an adult now" },
+            { value: "no", label: "No" },
+          ]} />
       )}
       {step === "country" && (
         <CountryPicker value={answers.country} onChange={(v) => set("country", v)} />
