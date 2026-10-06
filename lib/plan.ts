@@ -14,7 +14,7 @@ export interface Answers {
   country: string | null;
 }
 
-export interface PlanLetter { kind: LetterKind; platform: string; urls: string[] }
+export interface PlanLetter { kind: LetterKind; platform: string; urls: string[]; email?: string }
 
 export interface Plan {
   isMinor: boolean;
@@ -81,7 +81,7 @@ export function buildPlan(a: Answers): Plan {
 
   const letters: PlanLetter[] = [];
   for (const p of platforms) {
-    letters.push({ kind: platformKind, platform: p.name, urls: [] });
+    letters.push({ kind: platformKind, platform: p.name, urls: [], email: p.abuseEmail });
     if (!isMinor && a.selfTaken === "yes") letters.push({ kind: "dmca-takedown", platform: p.name, urls: [] });
   }
   if (otherUrl) {

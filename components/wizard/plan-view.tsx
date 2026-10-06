@@ -97,7 +97,7 @@ export function PlanView({ plan }: { plan: Plan }) {
       {plan.letters.length > 0 && (
         <Section title="Letters">
           <p className="text-sm text-muted">Edit, copy, and send. Dates are filled in for today.</p>
-          {plan.letters.map((l, i) => <LetterCard key={`${l.kind}-${l.platform}-${i}`} kind={l.kind} platform={l.platform} urls={l.urls} />)}
+          {plan.letters.map((l, i) => <LetterCard key={`${l.kind}-${l.platform}-${i}`} kind={l.kind} platform={l.platform} urls={l.urls} email={l.email} />)}
         </Section>
       )}
 

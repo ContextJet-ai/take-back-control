@@ -10,6 +10,7 @@ export const telegram: Platform = {
     "Email abuse@telegram.org with the same details so it reaches the abuse team directly.",
     "Keep the automatic reply as evidence that you reported it.",
   ],
+  abuseEmail: "abuse@telegram.org",
   acceptsStopNCIIHashes: false,
   expectedResponse: "Variable. Public channels are handled faster than private groups.",
   escalation: "Telegram rarely confirms removals. Check the link after a few days. If it is still up, email again and report through your country's police cybercrime unit.",

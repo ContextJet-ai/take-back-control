@@ -10,6 +10,7 @@ export const onlyfans: Platform = {
     "Say clearly that you did not consent and are not the account holder.",
     "Submit and keep the ticket email.",
   ],
+  abuseEmail: "support@onlyfans.com",
   acceptsStopNCIIHashes: true,
   expectedResponse: "Usually within a few days.",
   escalation: "If there is no reply in five days, email support@onlyfans.com with the ticket number and add the images to StopNCII.",

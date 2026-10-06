@@ -35,3 +35,15 @@ describe("deferred minors", () => {
     expect(getPlatform("pornhub")?.escalation).toMatch(/Pornhub uses/);
   });
 });
+
+describe("LetterCard mailto", () => {
+  it("offers to open the email app when an abuse address is known", () => {
+    render(<LetterCard kind="platform-report" platform="Telegram" urls={[]} email="abuse@telegram.org" />);
+    const link = screen.getByRole("link", { name: /open in your email app/i });
+    expect(link.getAttribute("href")).toMatch(/^mailto:abuse@telegram\.org\?subject=/);
+  });
+  it("shows no email link without an address", () => {
+    render(<LetterCard kind="platform-report" platform="X" urls={[]} />);
+    expect(screen.queryByRole("link", { name: /open in your email app/i })).toBeNull();
+  });
+});

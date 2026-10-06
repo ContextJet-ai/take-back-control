@@ -3,8 +3,9 @@ import { useState } from "react";
 import { renderLetter } from "@/lib/letters";
 import { letterTitles, type LetterKind } from "@/content/letters";
 import { Button } from "@/components/button";
+import { buildMailto } from "@/lib/mailto";
 
-export function LetterCard({ kind, platform, urls }: { kind: LetterKind; platform: string; urls: string[] }) {
+export function LetterCard({ kind, platform, urls, email }: { kind: LetterKind; platform: string; urls: string[]; email?: string }) {
   const [name, setName] = useState("");
   const [extraUrls, setExtraUrls] = useState(urls.join("\n"));
   const [copied, setCopied] = useState(false);
@@ -13,6 +14,8 @@ export function LetterCard({ kind, platform, urls }: { kind: LetterKind; platfor
   const date = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
   const text = renderLetter(kind, { platform, urls: extraUrls.split("\n").map((s) => s.trim()).filter(Boolean), date, name, contact });
   const id = `${kind}-${platform.replace(/\s+/g, "-")}`;
+  const subject = text.split("\n")[0].replace(/^Subject:\s*/, "");
+  const mail = email ? buildMailto(email, subject, text) : null;
 
   async function copy() {
     try { await navigator.clipboard.writeText(text); setCopied(true); setCopyFailed(false); setTimeout(() => setCopied(false), 1500); } catch { setCopyFailed(true); }
@@ -43,7 +46,9 @@ export function LetterCard({ kind, platform, urls }: { kind: LetterKind; platfor
       <div className="flex gap-3">
         <Button onClick={copy} className="px-4 py-2 text-sm">{copied ? "Copied" : "Copy"}</Button>
         <Button variant="secondary" onClick={download} className="px-4 py-2 text-sm">Download</Button>
+        {mail && !mail.tooLong && <a href={mail.href} className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium">Open in your email app</a>}
       </div>
+      {mail?.tooLong && <p className="text-sm text-muted">Too long for an email link. Copy it and paste into an email to {email}.</p>}
     </article>
   );
 }
