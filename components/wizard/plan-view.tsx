@@ -30,6 +30,7 @@ export function PlanView({ plan }: { plan: Plan }) {
 
       <Section title="Right now">
         <ol className="list-decimal space-y-2 pl-5">{plan.rightNow.map((s) => <li key={s}>{s}</li>)}</ol>
+        <p className="text-sm"><Link href="/evidence" className="font-medium text-accent underline">Build an evidence log</Link> with links, dates, and file fingerprints. Nothing is uploaded.</p>
       </Section>
 
       {(plan.platforms.length > 0 || plan.otherUrl) && (
