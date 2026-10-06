@@ -8,12 +8,14 @@ export function LetterCard({ kind, platform, urls }: { kind: LetterKind; platfor
   const [name, setName] = useState("");
   const [extraUrls, setExtraUrls] = useState(urls.join("\n"));
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
+  const [contact, setContact] = useState("");
   const date = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-  const text = renderLetter(kind, { platform, urls: extraUrls.split("\n").map((s) => s.trim()).filter(Boolean), date, name });
+  const text = renderLetter(kind, { platform, urls: extraUrls.split("\n").map((s) => s.trim()).filter(Boolean), date, name, contact });
   const id = `${kind}-${platform.replace(/\s+/g, "-")}`;
 
   async function copy() {
-    try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch { /* clipboard blocked; user can select text */ }
+    try { await navigator.clipboard.writeText(text); setCopied(true); setCopyFailed(false); setTimeout(() => setCopied(false), 1500); } catch { setCopyFailed(true); }
   }
   function download() {
     try {
@@ -30,7 +32,14 @@ export function LetterCard({ kind, platform, urls }: { kind: LetterKind; platfor
       <textarea id={`${id}-urls`} value={extraUrls} onChange={(e) => setExtraUrls(e.target.value)} rows={3} className="rounded-card border border-border bg-bg px-3 py-2 text-sm" />
       <label className="text-sm font-medium" htmlFor={`${id}-name`}>Your name (optional)</label>
       <input id={`${id}-name`} value={name} onChange={(e) => setName(e.target.value)} className="rounded-card border border-border bg-bg px-3 py-2 text-sm" />
+      {kind === "dmca-takedown" && (
+        <>
+          <label className="text-sm font-medium" htmlFor={`${id}-contact`}>Your contact details (email or postal address, required for a valid notice)</label>
+          <input id={`${id}-contact`} value={contact} onChange={(e) => setContact(e.target.value)} className="rounded-card border border-border bg-bg px-3 py-2 text-sm" />
+        </>
+      )}
       <pre className="whitespace-pre-wrap rounded-card bg-surface p-4 text-sm leading-relaxed">{text}</pre>
+      {copyFailed && <p role="alert" className="text-sm text-muted">Copying was blocked by your browser. Select the text above and copy it.</p>}
       <div className="flex gap-3">
         <Button onClick={copy} className="px-4 py-2 text-sm">{copied ? "Copied" : "Copy"}</Button>
         <Button variant="secondary" onClick={download} className="px-4 py-2 text-sm">Download</Button>

@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Take Back Control
 
-## Getting Started
+Step-by-step help for anyone whose intimate images were shared, or threatened to be shared, without consent. A six-question wizard produces a tailored plan: evidence steps, platform report links, prefilled takedown letters, and hand-offs to StopNCII (adults) or Take It Down (under 18).
 
-First, run the development server:
+Nothing a person enters is uploaded. There are no accounts, no database, no analytics.
+
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Test
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test           # unit tests (Vitest)
+npm run e2e        # end-to-end (Playwright, builds and serves production)
+npm run build      # production build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Structure
 
-## Learn More
+- `app/` routes. `/start` is the wizard, `/plan` the generated plan (client-only, noindex).
+- `components/wizard/` wizard steps and plan renderer.
+- `components/landing/` landing-page sections. The only motion and 3D on the site live here.
+- `content/` platforms, resources, and letter templates. Edit these to update guidance; no page code needs to change.
+- `lib/plan.ts` pure answers-to-plan function. `lib/letters.ts` template rendering. `lib/wizard-state.ts` session storage with memory fallback.
+- `docs/superpowers/` design spec and implementation plan.
 
-To learn more about Next.js, take a look at the following resources:
+## Keeping content accurate
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Platform report URLs change. Each entry in `content/platforms/` has `reportUrl`, `steps`, and `escalation`. Open the URL in a browser before editing, and keep the no-dash rule: visible text uses hyphens only.

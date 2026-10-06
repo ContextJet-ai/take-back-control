@@ -12,5 +12,5 @@ export const pornhub: Platform = {
   ],
   acceptsStopNCIIHashes: true,
   expectedResponse: "Usually within 48 hours.",
-  escalation: "If the video remains after 72 hours, reply to the confirmation email and add the video to StopNCII, which this site uses to block re-uploads.",
+  escalation: "If the video remains after 72 hours, reply to the confirmation email and add the video to StopNCII, which Pornhub uses to block re-uploads.",
 };

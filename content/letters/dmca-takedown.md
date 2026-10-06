@@ -12,5 +12,7 @@ I have a good faith belief that this use is not authorised by me, my agent, or t
 
 Please remove or disable access to this content promptly and confirm by email.
 
+Contact: {{contact}}
+
 Thank you.
 {{signature}}

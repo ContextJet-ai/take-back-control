@@ -21,7 +21,7 @@ export function Wizard() {
   const [answers, setAnswers] = useState<Partial<Answers>>(emptyAnswers);
   const [index, setIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [countryTouched, setCountryTouched] = useState(false);
+  const [restored, setRestored] = useState(false);
 
   useEffect(() => {
     const s = loadState();
@@ -29,6 +29,7 @@ export function Wizard() {
       setAnswers({ ...emptyAnswers, ...s.answers });
       setIndex(Math.min(s.step, stepsFor(s.answers).length - 1));
     }
+    setRestored(true);
   }, []);
 
   const steps = stepsFor(answers);
@@ -60,7 +61,7 @@ export function Wizard() {
       }
       case "selfTaken": return answers.selfTaken ? null : "Choose an option to continue.";
       case "minor": return answers.minor ? null : "Choose an option to continue.";
-      case "country": return countryTouched || answers.country === null ? null : "Choose a country or skip.";
+      case "country": return null;
     }
   }
 
@@ -82,6 +83,8 @@ export function Wizard() {
   }
 
   function back() { if (index > 0) { setError(null); setIndex(index - 1); saveState({ step: index - 1, answers }); } }
+
+  if (!restored) return <div className="mx-auto max-w-xl px-4 py-12 min-h-[60dvh]" aria-busy="true" />;
 
   return (
     <div key={step} ref={headingRef} className="mx-auto flex max-w-xl flex-col gap-6 px-4 pb-28 pt-12 motion-safe:animate-[fade_200ms_ease-out]">
@@ -112,7 +115,7 @@ export function Wizard() {
           options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]} />
       )}
       {step === "country" && (
-        <CountryPicker value={answers.country} onChange={(v) => { setCountryTouched(true); set("country", v); }} />
+        <CountryPicker value={answers.country} onChange={(v) => set("country", v)} />
       )}
       {error && step !== "platforms" && <p role="alert" className="text-sm text-red-700 dark:text-red-400">{error}</p>}
       <div className="flex items-center justify-between pt-4">
