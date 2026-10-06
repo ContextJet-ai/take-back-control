@@ -12,6 +12,7 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "geist": "^1.7.2",
     "gsap": "^3.15.0",
     "motion": "^14.0.0",

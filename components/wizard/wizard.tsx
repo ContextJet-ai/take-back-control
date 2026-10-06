@@ -87,7 +87,7 @@ export function Wizard() {
   if (!restored) return <div className="mx-auto max-w-xl px-4 py-12 min-h-[60dvh]" aria-busy="true" />;
 
   return (
-    <div key={step} ref={headingRef} className="mx-auto flex max-w-xl flex-col gap-6 px-4 pb-28 pt-12 motion-safe:animate-[fade_200ms_ease-out]">
+    <div key={step} ref={headingRef} className="mx-auto flex max-w-xl flex-col gap-6 px-4 pb-28 pt-12 motion-safe:animate-[rise_200ms_ease-out]">
       <Progress step={index + 1} total={steps.length} />
       {step === "contentType" && (
         <Question title="What was shared, or threatened?" name="contentType" value={answers.contentType}
@@ -121,9 +121,9 @@ export function Wizard() {
         <CountryPicker value={answers.country} onChange={(v) => set("country", v)} />
       )}
       {error && step !== "platforms" && <p role="alert" className="text-sm text-red-700 dark:text-red-400">{error}</p>}
-      <div className="flex items-center justify-between pt-4">
-        <Button variant="secondary" onClick={back} disabled={index === 0}>Back</Button>
-        <Button onClick={next}>{isLast ? "See my plan" : "Next"}</Button>
+      <div className="sticky bottom-0 -mx-4 flex items-center justify-between gap-3 border-t border-border bg-bg/95 px-4 py-3 backdrop-blur [padding-bottom:max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:pt-4 sm:backdrop-blur-none">
+        <Button variant="secondary" onClick={back} disabled={index === 0} className="min-h-[44px]">Back</Button>
+        <Button onClick={next} className="min-h-[44px] shadow-[0_1px_0_rgba(0,0,0,0.08)] hover:brightness-105">{isLast ? "See my plan" : "Next"}</Button>
       </div>
     </div>
   );
