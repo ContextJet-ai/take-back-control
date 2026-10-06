@@ -6,9 +6,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const STEPS = [
-  { title: "Document", body: "Screenshot every post with its link and date. Evidence first, before anything disappears." },
-  { title: "Remove", body: "Report to each platform with the exact form that handles intimate images, and send the letters we prefill." },
-  { title: "Prevent", body: "Fingerprint the images on your own device through StopNCII so partner platforms block re-uploads." },
+  { title: "Document", body: "Record every link and date before anything disappears." },
+  { title: "Remove", body: "Report to each platform with the right form, and send the letters we prefill." },
+  { title: "Prevent", body: "Fingerprint the images on your own device so partner platforms block re-uploads." },
 ];
 
 export function StepsStack() {
@@ -39,7 +39,7 @@ export function StepsStack() {
       {STEPS.map((s, i) => (
         <div key={s.title} className={`stack-card flex items-center justify-center bg-bg px-4 ${reduce ? "py-20" : "min-h-[100dvh]"}`}>
           <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-[1fr_2fr]">
-            <span className="text-7xl font-semibold tracking-tighter text-accent">{i + 1}</span>
+            <span className="inline-flex h-24 w-24 items-center justify-center rounded-card bg-accent-soft text-5xl font-semibold tracking-tighter text-accent md:h-32 md:w-32 md:text-6xl">{i + 1}</span>
             <div>
               <h2 className="text-3xl font-semibold tracking-tight">{s.title}</h2>
               <p className="mt-3 max-w-[55ch] text-lg text-muted">{s.body}</p>
