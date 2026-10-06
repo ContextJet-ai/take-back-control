@@ -3,7 +3,7 @@ test("evidence log downloads with a file fingerprint", async ({ page }) => {
   await page.goto("/evidence");
   await page.getByLabel("Links, one per line").fill("https://a.example/1");
   await page.getByLabel("Add screenshots or files").setInputFiles({ name: "shot.png", mimeType: "image/png", buffer: Buffer.from("abc") });
-  await expect(page.getByText(/ba7816bf/)).toBeVisible();
+  await expect(page.locator("li span", { hasText: /ba7816bf/ })).toBeVisible();
   const dl = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download log" }).click();
   const file = await dl;
