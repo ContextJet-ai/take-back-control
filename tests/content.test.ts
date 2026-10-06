@@ -37,3 +37,19 @@ describe("resources", () => {
     expect(r.some((x) => x.name === "Take It Down")).toBe(false);
   });
 });
+
+describe("minor resources", () => {
+  it("adds a child helpline for known countries", () => {
+    const gb = resourcesFor("GB", true);
+    expect(gb.some((r) => r.name === "Childline")).toBe(true);
+    expect(gb.some((r) => r.name === "Take It Down")).toBe(true);
+  });
+  it("falls back to global entries for unknown countries", () => {
+    const zz = resourcesFor("ZZ", true);
+    expect(zz.every((r) => r.region === "global")).toBe(true);
+    expect(zz.some((r) => r.name === "NCMEC CyberTipline")).toBe(true);
+  });
+  it("includes a sextortion resource for minors", () => {
+    expect(resourcesFor(null, true).some((r) => /sextortion/i.test(r.description))).toBe(true);
+  });
+});
