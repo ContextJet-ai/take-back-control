@@ -17,6 +17,8 @@ export interface PlanLetter { kind: LetterKind; platform: string; urls: string[]
 
 export interface Plan {
   isMinor: boolean;
+  isSextortion: boolean;
+  warnings: string[];
   rightNow: string[];
   platforms: Platform[];
   otherUrl: string | null;
@@ -30,25 +32,41 @@ export function buildPlan(a: Answers): Plan {
   const isMinor = a.minor === "yes";
   const posted = a.posted === "yes" || a.posted === "unsure";
 
+  const isSextortion = a.posted === "threatened";
+  const warnings: string[] = [];
   const rightNow: string[] = [];
-  if (posted) {
-    rightNow.push("Take screenshots of every post, including the URL, the account name, and the date. Save them somewhere private.");
-  } else {
-    rightNow.push("Take screenshots of the threats, including the account name and the date. Save them somewhere private.");
-  }
-  rightNow.push("Do not pay, reply, or engage with the person threatening you. It almost always makes it worse.");
+
   if (isMinor) {
-    rightNow.push("If you can, tell a trusted adult. You are not in trouble, and this is not your fault.");
+    warnings.push("Do not forward, send, or save a copy of the image to anyone, including a parent, teacher, or the police. In most countries that is itself a crime, even when you are the person in it. Show them the account and the message with the image covered, or give them the link.");
+    rightNow.push("Write down the link, the account name, and the date for every post or message. Do not screenshot the image itself.");
+    if (isSextortion) {
+      rightNow.push("Stop replying. Do not pay and do not send anything else. Paying leads to more demands, not fewer.");
+      rightNow.push("Do not delete the account or the messages. They are evidence. Block the person after you have the details above.");
+    }
+    rightNow.push("Tell an adult you trust. You are not in trouble, and this is not your fault.");
+  } else {
+    rightNow.push(posted
+      ? "Take screenshots of every post, including the URL, the account name, and the date. Save them somewhere private."
+      : "Take screenshots of the threats, including the account name and the date. Save them somewhere private.");
+    rightNow.push("Do not pay, reply, or engage with the person threatening you. It almost always makes it worse.");
   }
 
+  const forMinor = (p: Platform): Platform => ({
+    ...p,
+    steps: p.steps.map((t) => t.replaceAll("StopNCII", "Take It Down")),
+    escalation: p.escalation.replaceAll("StopNCII", "Take It Down"),
+    notes: p.notes?.replaceAll("StopNCII", "Take It Down"),
+  });
   const platforms = posted
-    ? a.platformSlugs.map(getPlatform).filter((p): p is Platform => Boolean(p) && p!.slug !== "other")
+    ? a.platformSlugs.map(getPlatform).filter((p): p is Platform => Boolean(p) && p!.slug !== "other").map((p) => (isMinor ? forMinor(p) : p))
     : [];
   const hasOther = posted && a.platformSlugs.includes("other") && a.otherUrl.trim().length > 0;
   const otherUrl = hasOther ? a.otherUrl.trim() : null;
 
   const all = resourcesFor(a.country, isMinor);
-  const prevention = all.filter((r) => r.kind === "prevention");
+  const prevention = all
+    .filter((r) => r.kind === "prevention")
+    .sort((x, y) => (x.name === "Take It Down" ? -1 : y.name === "Take It Down" ? 1 : 0));
   const support = all.filter((r) => r.kind !== "prevention");
 
   const letters: PlanLetter[] = [];
@@ -63,6 +81,8 @@ export function buildPlan(a: Answers): Plan {
 
   return {
     isMinor,
+    isSextortion,
+    warnings,
     rightNow,
     platforms,
     otherUrl,

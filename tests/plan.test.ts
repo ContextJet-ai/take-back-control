@@ -44,3 +44,36 @@ describe("buildPlan", () => {
     expect(p.platforms.map((x) => x.slug)).toEqual(["meta"]);
   });
 });
+
+describe("minor path", () => {
+  const minor: Answers = { ...base, minor: "yes" };
+  it("warns against forwarding the image, even when nothing is posted", () => {
+    const p = buildPlan({ ...minor, posted: "threatened", platformSlugs: [] });
+    expect(p.warnings.some((w) => /do not forward|do not send/i.test(w))).toBe(true);
+  });
+  it("routes threat-only minors to the sextortion steps", () => {
+    const p = buildPlan({ ...minor, contentType: "threat", posted: "threatened", platformSlugs: [] });
+    expect(p.isSextortion).toBe(true);
+    expect(p.rightNow.some((s) => /stop replying/i.test(s))).toBe(true);
+    expect(p.rightNow.some((s) => /do not delete/i.test(s))).toBe(true);
+    expect(p.support.some((r) => /sextortion/i.test(r.description))).toBe(true);
+  });
+  it("never tells a minor to save or screenshot the image itself", () => {
+    const p = buildPlan(minor);
+    expect(p.rightNow.join(" ")).not.toMatch(/screenshot(s)? of (every post|the image)/i);
+    expect(p.rightNow.some((s) => /write down the link/i.test(s))).toBe(true);
+  });
+  it("puts Take It Down first and never StopNCII", () => {
+    const p = buildPlan(minor);
+    expect(p.prevention[0]?.name).toBe("Take It Down");
+    const visible = [...p.rightNow, ...p.warnings,
+      ...p.platforms.flatMap((x) => [...x.steps, x.escalation, x.notes ?? ""]),
+      ...p.prevention.flatMap((r) => [r.name, r.description]),
+      ...p.support.flatMap((r) => [r.name, r.description])].join(" ");
+    expect(visible).not.toContain("StopNCII");
+  });
+  it("adults are not flagged as sextortion unless threat only", () => {
+    expect(buildPlan(base).isSextortion).toBe(false);
+    expect(buildPlan({ ...base, contentType: "threat", posted: "threatened", platformSlugs: [] }).isSextortion).toBe(true);
+  });
+});
