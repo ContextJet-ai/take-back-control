@@ -36,7 +36,7 @@ test("minor threat-only path shows sextortion steps and no StopNCII", async ({ p
   await page.getByLabel("No, someone else did").check(); await page.getByText("Next").click();
   await page.getByLabel("Yes", { exact: true }).check(); await page.getByText("Next").click();
   await page.getByLabel("Prefer not to say").check(); await page.getByText("See my plan").click();
-  await expect(page.getByRole("alert").filter({ hasText: /read this first/i })).toContainText(/do not forward/i);
+  await expect(page.getByRole("region", { name: /read this first/i })).toContainText(/do not forward/i);
   await expect(page.getByText(/stop replying/i)).toBeVisible();
   await expect(page.getByText("StopNCII")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Take It Down" })).toBeVisible();

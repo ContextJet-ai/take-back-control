@@ -8,7 +8,7 @@ I am the person shown in the content at the links below. It is intimate content 
 
 {{urls}}
 
-Please confirm by email when it has been removed. I have kept copies of the posts and links as evidence.
+Please confirm by email when it has been removed. I have kept the links and account details as evidence.
 
 Thank you.
 {{signature}}

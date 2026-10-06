@@ -22,10 +22,10 @@ export function PlanView({ plan }: { plan: Plan }) {
       </header>
 
       {plan.warnings.length > 0 && (
-        <div role="alert" className="rounded-card border border-accent bg-surface p-5">
-          <h2 className="text-lg font-semibold">Read this first</h2>
+        <section aria-labelledby="read-first" className="rounded-card border border-accent bg-surface p-5">
+          <h2 id="read-first" className="text-lg font-semibold">Read this first</h2>
           <ul className="mt-2 list-disc space-y-2 pl-5">{plan.warnings.map((w) => <li key={w}>{w}</li>)}</ul>
-        </div>
+        </section>
       )}
 
       <Section title="Right now">

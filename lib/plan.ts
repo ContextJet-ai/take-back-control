@@ -37,11 +37,13 @@ export function buildPlan(a: Answers): Plan {
   const rightNow: string[] = [];
 
   if (isMinor) {
-    warnings.push("Do not forward, send, or save a copy of the image to anyone, including a parent, teacher, or the police. In most countries that is itself a crime, even when you are the person in it. Show them the account and the message with the image covered, or give them the link.");
+    warnings.push("Do not forward or send the image to anyone, including a parent, teacher, or the police, and do not download or ask for new copies. In most countries that is itself a crime, even when you are the person in it. Show them the account and the message with the image covered, or give them the link.");
+    warnings.push("If the image is already on your phone, you can use Take It Down with it. It makes a fingerprint on your phone and never sends the image anywhere.");
     rightNow.push("Write down the link, the account name, and the date for every post or message. Do not screenshot the image itself.");
     if (isSextortion) {
       rightNow.push("Stop replying. Do not pay and do not send anything else. Paying leads to more demands, not fewer.");
       rightNow.push("Do not delete the account or the messages. They are evidence. Block the person after you have the details above.");
+      rightNow.push("Report the account to the app it is on (press and hold the profile or message and choose Report), then report it to NCMEC's CyberTipline using the link in Support below. Both are free and you can stay anonymous.");
     }
     rightNow.push("Tell an adult you trust. You are not in trouble, and this is not your fault.");
   } else {

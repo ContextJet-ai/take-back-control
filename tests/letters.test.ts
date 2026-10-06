@@ -24,4 +24,9 @@ describe("renderLetter", () => {
       expect(renderLetter(kind, vars)).not.toMatch(/[–—]/);
     }
   });
+  it("platform letter does not claim to have kept copies of the content", () => {
+    const out = renderLetter("platform-report", vars);
+    expect(out).not.toMatch(/kept copies/i);
+    expect(out).toMatch(/kept the links and account details/i);
+  });
 });

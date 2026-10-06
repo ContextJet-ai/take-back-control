@@ -76,4 +76,13 @@ describe("minor path", () => {
     expect(buildPlan(base).isSextortion).toBe(false);
     expect(buildPlan({ ...base, contentType: "threat", posted: "threatened", platformSlugs: [] }).isSextortion).toBe(true);
   });
+  it("tells minors they may still use Take It Down with an image already on their phone", () => {
+    const p = buildPlan(minor);
+    expect(p.warnings.join(" ")).toMatch(/already on your phone, you can use Take It Down/i);
+    expect(p.warnings.join(" ")).not.toMatch(/save a copy of the image to anyone/i);
+  });
+  it("sextorted minors are told to report the account and CyberTipline", () => {
+    const p = buildPlan({ ...minor, contentType: "threat", posted: "threatened", platformSlugs: [] });
+    expect(p.rightNow.some((s) => /report the account to the app/i.test(s) && /CyberTipline/.test(s))).toBe(true);
+  });
 });

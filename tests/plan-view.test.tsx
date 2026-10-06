@@ -24,8 +24,9 @@ describe("PlanView", () => {
   it("renders warnings before everything else for a minor", () => {
     const plan = buildPlan({ contentType: "image", posted: "yes", platformSlugs: ["meta"], otherUrl: "", selfTaken: "no", minor: "yes", country: null });
     render(<PlanView plan={plan} />);
-    const alert = screen.getByRole("alert");
-    expect(alert.textContent).toMatch(/do not forward/i);
-    expect(alert.compareDocumentPosition(screen.getByText("Right now")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const block = screen.getByRole("region", { name: /read this first/i });
+    expect(block.textContent).toMatch(/do not forward/i);
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(block.compareDocumentPosition(screen.getByText("Right now")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 });
