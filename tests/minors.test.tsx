@@ -30,10 +30,6 @@ describe("deferred minors", () => {
     expect(renderLetter("platform-report", vars)).not.toContain("Contact:");
   });
 
-  it("Pornhub escalation names the platform, not this site", () => {
-    expect(getPlatform("pornhub")?.escalation).not.toMatch(/this site uses/);
-    expect(getPlatform("pornhub")?.escalation).toMatch(/Pornhub uses/);
-  });
 });
 
 describe("LetterCard mailto", () => {

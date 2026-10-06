@@ -53,6 +53,7 @@ describe("Wizard", () => {
 
 describe("country picker", () => {
   it("lists every EU member and groups them", () => {
+    clearState();
     render(<Wizard />);
     fireEvent.click(screen.getByLabelText("An image")); fireEvent.click(screen.getByText("Next"));
     fireEvent.click(screen.getByLabelText("Yes")); fireEvent.click(screen.getByText("Next"));
