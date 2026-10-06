@@ -8,6 +8,7 @@ export function renderLetter(kind: LetterKind, vars: LetterVars): string {
     .replaceAll("{{platform}}", vars.platform)
     .replaceAll("{{date}}", vars.date)
     .replaceAll("{{urls}}", vars.urls.join("\n"))
+    .replaceAll("{{name}}", vars.name?.trim() || "(your full name, required)")
     .replaceAll("{{signature}}", signature)
     .replaceAll("{{contact}}", vars.contact?.trim() || "(add your email or postal address)")
     .trimEnd();

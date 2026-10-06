@@ -1,15 +1,18 @@
 import platformReport from "./platform-report.md?raw";
 import dmcaTakedown from "./dmca-takedown.md?raw";
 import hostAbuse from "./host-abuse.md?raw";
+import takeItDown from "./take-it-down-notice.md?raw";
+import indiaGrievance from "./india-grievance.md?raw";
+import dsaNotice from "./dsa-notice.md?raw";
 
 export type LetterKind = "platform-report" | "dmca-takedown" | "host-abuse" | "take-it-down-notice" | "india-grievance" | "dsa-notice";
 export const letterTemplates: Record<LetterKind, string> = {
   "platform-report": platformReport,
   "dmca-takedown": dmcaTakedown,
   "host-abuse": hostAbuse,
-  "take-it-down-notice": "",
-  "india-grievance": "",
-  "dsa-notice": "",
+  "take-it-down-notice": takeItDown,
+  "india-grievance": indiaGrievance,
+  "dsa-notice": dsaNotice,
 };
 export const letterTitles: Record<LetterKind, string> = {
   "platform-report": "Removal request",
