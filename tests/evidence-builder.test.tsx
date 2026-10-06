@@ -11,10 +11,10 @@ describe("EvidenceBuilder", () => {
     const input = screen.getByLabelText(/add screenshots or files/i) as HTMLInputElement;
     const file = new File(["abc"], "shot.png", { type: "image/png" });
     fireEvent.change(input, { target: { files: [file] } });
-    await waitFor(() => expect(screen.getAllByText(/ba7816bf/).length).toBe(1));
+    await waitFor(() => expect(screen.getAllByText(/ba7816bf/, { selector: "span" }).length).toBe(1));
     fireEvent.change(input, { target: { files: [file] } });
     await new Promise((r) => setTimeout(r, 50));
-    expect(screen.getAllByText(/ba7816bf/).length).toBe(1);
+    expect(screen.getAllByText(/ba7816bf/, { selector: "span" }).length).toBe(1);
   });
 
   it("accepts a PDF", async () => {

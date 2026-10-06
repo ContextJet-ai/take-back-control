@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { hashBytes, hashFile, renderEvidenceLog, renderEvidenceJson } from "@/lib/evidence";
 
-const base = { urls: ["https://a.example/p/1"], accounts: ["@someone"], statement: "They posted it on 5 October.", files: [], generatedAt: new Date("2026-10-06T10:00:00Z"), timeZone: "Asia/Kolkata" };
+const base = { urls: ["https://a.example/p/1"], accounts: ["@someone"], statement: "They posted it on 5 October.", firstSeen: "", files: [], generatedAt: new Date("2026-10-06T10:00:00Z"), timeZone: "Asia/Kolkata" };
 
 describe("evidence", () => {
   it("hashes bytes to the known SHA-256 of 'abc'", async () => {
@@ -16,7 +16,7 @@ describe("evidence", () => {
     expect(h).toHaveLength(64);
   });
   it("renders a log with every section and the clock caveat", () => {
-    const log = renderEvidenceLog({ ...base, files: [{ name: "shot.png", size: 1234, type: "image/png", sha256: "ab".repeat(32) }] });
+    const log = renderEvidenceLog({ ...base, files: [{ name: "shot.png", size: 1234, type: "image/png", sha256: "ab".repeat(32), lastModified: 0 }] });
     expect(log).toContain("Evidence log");
     expect(log).toContain("2026-10-06T10:00:00.000Z");
     expect(log).toContain("Asia/Kolkata");
