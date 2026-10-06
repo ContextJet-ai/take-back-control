@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
     ];
   },
   webpack(config) {
-    config.module.rules.push({ test: /\.md$/, type: "asset/source" });
+    config.module.rules.push({ test: /\.md$/, resourceQuery: /raw/, type: "asset/source" });
     return config;
   },
 };
