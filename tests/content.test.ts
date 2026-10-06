@@ -53,3 +53,20 @@ describe("minor resources", () => {
     expect(resourcesFor(null, true).some((r) => /sextortion/i.test(r.description))).toBe(true);
   });
 });
+
+import { leversFor } from "@/content/levers";
+describe("levers", () => {
+  it("US has the TAKE IT DOWN lever with a letter", () => { expect(leversFor("US").find((l) => l.letterKind === "take-it-down-notice")).toBeTruthy(); });
+  it("IN has the 24-hour grievance lever", () => { const l = leversFor("IN").find((x) => x.letterKind === "india-grievance"); expect(l?.deadline).toMatch(/24 hours/); });
+  it("AU has eSafety with no letter", () => { const l = leversFor("AU")[0]; expect(l.name).toMatch(/eSafety/); expect(l.letterKind).toBeUndefined(); });
+  it("DE gets the EU DSA lever", () => { expect(leversFor("DE").some((l) => l.letterKind === "dsa-notice")).toBe(true); });
+  it("every lever is dated and dash-free", () => {
+    for (const c of ["US","IN","GB","AU","CA","DE"]) for (const l of leversFor(c)) { expect(l.verifiedOn).toMatch(/^\d{4}-\d{2}-\d{2}$/); expect(JSON.stringify(l)).not.toMatch(/[–—]/); }
+  });
+});
+describe("regional adult resources", () => {
+  it("DE adult gets EU and global entries", () => { const r = resourcesFor("DE", false); expect(r.some((x) => x.region === "EU")).toBe(true); expect(r.some((x) => x.region === "global")).toBe(true); });
+  it("regional resources contain no dashes", () => {
+    for (const c of ["US","IN","GB","AU","CA","DE"]) expect(JSON.stringify([...resourcesFor(c, true), ...resourcesFor(c, false)])).not.toMatch(/[–—]/);
+  });
+});
