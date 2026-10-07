@@ -54,7 +54,7 @@ export function PlanView({ plan }: { plan: Plan }) {
             </div>
           ))}
           {plan.otherUrl && (
-            <div className="rounded-card border border-border p-5">
+            <div className="rounded-card border border-border bg-surface-solid p-5">
               <h3 className="font-semibold">Another website</h3>
               <p className="mt-2 text-sm">Find the site&apos;s abuse contact, then send the hosting provider letter below. <Link href="/platforms/other" className="text-accent underline">How to find the contact</Link>.</p>
             </div>

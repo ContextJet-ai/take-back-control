@@ -14,7 +14,7 @@ export function PlatformPicker({ selected, otherUrl, error, onToggle, onOtherUrl
         return (
           <label key={p.slug} className={`relative flex min-h-[44px] cursor-pointer items-center gap-3 rounded-card border p-4 transition-colors ${on ? "border-accent bg-accent-soft" : "border-border bg-surface-solid hover:border-muted"}`}>
             <input type="checkbox" checked={on} onChange={() => onToggle(p.slug)} className="absolute left-4 top-1/2 h-6 w-6 -translate-y-1/2 cursor-pointer opacity-0" aria-label={p.name} />
-            <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border ${on ? "border-accent bg-accent text-accent-fg" : "border-border"}`} aria-hidden="true">
+            <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 ${on ? "border-accent bg-accent text-accent-fg" : "border-muted"}`} aria-hidden="true">
               {on && <Check size={14} weight="bold" />}
             </span>
             <span className="font-medium">{p.name}</span>

@@ -18,8 +18,8 @@ export function Footer() {
         <nav aria-label="About" className="flex flex-col gap-2">
           <Link href="/about" className="hover:text-accent">About</Link>
           <Link href="/privacy" className="hover:text-accent">Privacy</Link>
-          <span>Press Escape twice to leave this site at any time.</span>
         </nav>
+        <p className="sm:col-span-3">Need to leave fast? Use the Quick exit button. On a computer, pressing Escape twice does the same.</p>
       </div>
     </footer>
   );

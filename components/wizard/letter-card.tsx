@@ -45,7 +45,7 @@ export function LetterCard({ kind, platform, urls, email, minor = false }: { kin
           <input id={`${id}-contact`} value={contact} onChange={(e) => setContact(e.target.value)} className="rounded-card border border-border bg-bg px-3 py-2 text-sm" />
         </>
       )}
-      <pre className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] rounded-card bg-surface-solid p-4 text-sm leading-relaxed">{text}</pre>
+      <pre className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] rounded-card border border-border bg-bg p-4 text-sm leading-relaxed">{text}</pre>
       {copyFailed && <p role="alert" className="text-sm text-muted">Copying was blocked by your browser. Select the text above and copy it.</p>}
       <div className="flex gap-3">
         <Button onClick={copy} className="px-4 py-2 text-sm">{copied ? "Copied" : "Copy"}</Button>

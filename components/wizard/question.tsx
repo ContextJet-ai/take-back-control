@@ -10,15 +10,16 @@ export function Question<V extends string>({ title, name, options, value, onChan
       <legend tabIndex={-1} className="mb-4 text-2xl font-semibold tracking-tight outline-none">{title}</legend>
       {options.map((o) => {
         const selected = value === o.value;
+        const id = `${name}-${o.value}`;
         return (
           <label key={o.value} className={`relative flex min-h-[44px] cursor-pointer items-center gap-3 rounded-card border p-4 transition-colors ${selected ? "border-accent bg-accent-soft" : "border-border bg-surface-solid hover:border-muted"}`}>
-            <input type="radio" name={name} value={o.value} checked={selected} onChange={() => onChange(o.value)} className="absolute left-4 top-1/2 h-6 w-6 -translate-y-1/2 cursor-pointer opacity-0" aria-label={o.label} />
-            <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${selected ? "border-accent bg-accent text-accent-fg" : "border-border"}`} aria-hidden="true">
+            <input type="radio" name={name} value={o.value} checked={selected} onChange={() => onChange(o.value)} className="absolute left-4 top-1/2 h-6 w-6 -translate-y-1/2 cursor-pointer opacity-0" aria-labelledby={`${id}-label`} aria-describedby={o.hint ? `${id}-hint` : undefined} />
+            <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 ${selected ? "border-accent bg-accent text-accent-fg" : "border-muted"}`} aria-hidden="true">
               {selected && <Check size={14} weight="bold" />}
             </span>
             <span>
-              <span className="block font-medium">{o.label}</span>
-              {o.hint && <span className="block text-sm text-muted">{o.hint}</span>}
+              <span id={`${id}-label`} className="block font-medium">{o.label}</span>
+              {o.hint && <span id={`${id}-hint`} className="block text-sm text-muted">{o.hint}</span>}
             </span>
           </label>
         );

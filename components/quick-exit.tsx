@@ -27,7 +27,7 @@ export function QuickExit() {
     <button
       type="button"
       onClick={leaveNow}
-      className="fixed bottom-4 left-4 z-40 rounded-full bg-fg px-4 py-2 text-sm font-medium text-bg shadow-lg sm:left-auto sm:right-4"
+      className="fixed right-4 top-20 z-40 rounded-full bg-fg px-4 py-2 text-sm font-medium text-bg shadow-lg sm:top-auto sm:bottom-4"
       aria-label="Quick exit. Leaves this site immediately and clears your answers. Press Escape twice for the same."
     >
       Quick exit

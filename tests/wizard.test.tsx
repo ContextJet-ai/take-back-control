@@ -67,3 +67,13 @@ describe("country picker", () => {
     expect(select.querySelectorAll("optgroup").length).toBe(2);
   });
 });
+
+describe("option accessibility", () => {
+  it("exposes the hint as the input description, not part of its name", () => {
+    clearState();
+    render(<Wizard />);
+    const input = screen.getByLabelText("A threat to share something");
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+    expect(document.getElementById(input.getAttribute("aria-describedby")!)?.textContent).toMatch(/nothing has been posted yet/i);
+  });
+});

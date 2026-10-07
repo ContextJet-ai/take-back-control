@@ -44,6 +44,7 @@ export function ShaderPanel({ className = "" }: { className?: string }) {
   useEffect(() => {
     const canvas = ref.current; if (!canvas) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) { setFailed(true); return; }
     const gl = canvas.getContext("webgl", { antialias: false, powerPreference: "low-power" });
     if (!gl) { setFailed(true); return; }
     const mk = (type: number, src: string) => { const s = gl.createShader(type)!; gl.shaderSource(s, src); gl.compileShader(s); return s; };
@@ -62,11 +63,11 @@ export function ShaderPanel({ className = "" }: { className?: string }) {
     setColors();
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const resize = () => { const w = Math.floor(canvas.clientWidth * dpr), h = Math.floor(canvas.clientHeight * dpr); if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); gl.uniform2f(uRes, w, h); } };
-    let raf = 0, visible = true, start = performance.now();
-    const frame = () => { resize(); gl.uniform1f(uTime, reduce ? 40 : (performance.now() - start) / 1000); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); if (!reduce && visible) raf = requestAnimationFrame(frame); };
-    const io = new IntersectionObserver(([e]) => { const was = visible; visible = e.isIntersecting; if (visible && !was && !reduce) frame(); }, { threshold: 0.05 });
+    let raf = 0, visible = true; const start = performance.now();
+    const frame = () => { resize(); gl.uniform1f(uTime, (performance.now() - start) / 1000); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); if (visible) raf = requestAnimationFrame(frame); };
+    const io = new IntersectionObserver(([e]) => { const was = visible; visible = e.isIntersecting; if (visible && !was) frame(); }, { threshold: 0.05 });
     io.observe(canvas);
-    const mq = window.matchMedia("(prefers-color-scheme: dark)"); const onTheme = () => { setColors(); if (reduce) frame(); };
+    const mq = window.matchMedia("(prefers-color-scheme: dark)"); const onTheme = () => { setColors(); };
     mq.addEventListener("change", onTheme); window.addEventListener("resize", resize);
     frame();
     return () => { cancelAnimationFrame(raf); io.disconnect(); mq.removeEventListener("change", onTheme); window.removeEventListener("resize", resize); gl.getExtension("WEBGL_lose_context")?.loseContext(); };
