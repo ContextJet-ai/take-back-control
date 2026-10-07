@@ -67,7 +67,7 @@ describe("minor path", () => {
     const p = buildPlan(minor);
     expect(p.prevention[0]?.name).toBe("Take It Down");
     const visible = [...p.rightNow, ...p.warnings,
-      ...p.platforms.flatMap((x) => [...x.steps, x.escalation, x.notes ?? ""]),
+      ...p.platforms.flatMap((x) => [...x.steps, x.escalation, x.expectedResponse, x.notes ?? ""]),
       ...p.prevention.flatMap((r) => [r.name, r.description]),
       ...p.support.flatMap((r) => [r.name, r.description])].join(" ");
     expect(visible).not.toContain("StopNCII");

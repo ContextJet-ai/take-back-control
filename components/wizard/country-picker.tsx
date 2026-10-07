@@ -7,7 +7,7 @@ const NAMES: Record<string, string> = {
 };
 
 function name(code: string): string {
-  try { return new Intl.DisplayNames(["en"], { type: "region" }).of(code) ?? NAMES[code] ?? code; } catch { return NAMES[code] ?? code; }
+  return NAMES[code] ?? code;
 }
 const byName = (a: string, b: string) => name(a).localeCompare(name(b));
 

@@ -60,6 +60,7 @@ export function buildPlan(a: Answers): Plan {
     ...p,
     steps: p.steps.map((t) => t.replaceAll("StopNCII", "Take It Down")),
     escalation: p.escalation.replaceAll("StopNCII", "Take It Down"),
+    expectedResponse: p.expectedResponse.replaceAll("StopNCII", "Take It Down"),
     notes: p.notes?.replaceAll("StopNCII", "Take It Down"),
   });
   const platforms = posted
