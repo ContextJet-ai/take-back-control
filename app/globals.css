@@ -10,6 +10,9 @@
   --accent: #1c6a66;
   --accent-fg: #f1faf9;
   --accent-soft: #e4f1ef;
+  --shader-a: #cfe6e2;
+  --shader-b: #2a8a84;
+  --shader-c: #f3e7cf;
   --radius: 12px;
 }
 
@@ -24,6 +27,9 @@
     --accent: #45aaa3;
     --accent-fg: #062220;
     --accent-soft: #15302e;
+    --shader-a: #0c2b29;
+    --shader-b: #3d9c95;
+    --shader-c: #d9c39a;
   }
 }
 

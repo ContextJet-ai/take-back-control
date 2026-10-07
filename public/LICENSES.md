@@ -1,4 +1,4 @@
 # Image sources
 
-- hero.webp: placeholder photograph from picsum.photos (seed calm-window-light), which serves Unsplash-licensed images. Replace with a licensed or generated image before public launch.
+- hero: generated live by a WebGL fragment shader (components/landing/shader-panel.tsx). No third-party rights.
 - hash-static.webp: generated locally with a script (teal tile grid). No third-party rights.
