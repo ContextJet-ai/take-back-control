@@ -37,7 +37,7 @@ export function StepsStack() {
   return (
     <section id="how" ref={ref} className="relative" data-testid="steps-stack" data-reduced={reduce} data-ready={ready}>
       {STEPS.map((s, i) => (
-        <div key={s.title} className={`stack-card flex items-center justify-center bg-bg px-4 ${reduce ? "py-20" : "min-h-[100dvh]"}`}>
+        <div key={s.title} style={{ zIndex: i + 1 }} className={`stack-card relative flex items-center justify-center bg-bg px-4 ${reduce ? "py-20" : "min-h-[100dvh]"}`}>
           <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-[1fr_2fr]">
             <span className="inline-flex h-24 w-24 items-center justify-center rounded-card bg-accent-soft text-5xl font-semibold tracking-tighter text-accent md:h-32 md:w-32 md:text-6xl">{i + 1}</span>
             <div>
