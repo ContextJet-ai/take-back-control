@@ -3,6 +3,11 @@ import { StepsStack } from "@/components/landing/steps-stack";
 import { HashVisual } from "@/components/landing/hash-visual";
 import { ResourcesReveal } from "@/components/landing/resources-reveal";
 import { ClosingCta } from "@/components/landing/closing-cta";
+import { Facts } from "@/components/landing/facts";
+import { Toolkit } from "@/components/landing/toolkit";
+import { Audience } from "@/components/landing/audience";
+import { PlatformsCovered } from "@/components/landing/platforms-covered";
+import { Faq } from "@/components/landing/faq";
 import { resourcesFor } from "@/content/resources";
 
 export default function Home() {
@@ -10,7 +15,10 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <Facts />
       <StepsStack />
+      <Toolkit />
+      <Audience />
       <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-24 md:grid-cols-2">
         <div>
           <h2 className="text-3xl font-semibold tracking-tight">How fingerprinting protects you</h2>
@@ -18,10 +26,12 @@ export default function Home() {
         </div>
         <HashVisual />
       </section>
-      <section className="mx-auto max-w-6xl px-4 py-12">
+      <PlatformsCovered />
+      <section className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-3xl font-semibold tracking-tight">Someone to talk to</h2>
         <div className="mt-8"><ResourcesReveal items={items} /></div>
       </section>
+      <Faq />
       <ClosingCta />
     </>
   );

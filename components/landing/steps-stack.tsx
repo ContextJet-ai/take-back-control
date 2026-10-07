@@ -6,9 +6,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const STEPS = [
-  { title: "Document", body: "Record every link and date before anything disappears." },
-  { title: "Remove", body: "Report to each platform with the right form, and send the letters we prefill." },
-  { title: "Prevent", body: "Fingerprint the images on your own device so partner platforms block re-uploads." },
+  { title: "Document", body: "Record every link and date before anything disappears.", points: ["Links, account names, and when you first saw it", "A fingerprint of each file, made on your device", "No screenshots of anyone under 18, ever"], href: "/evidence", cta: "Build an evidence log" },
+  { title: "Remove", body: "Report to each platform with the right form, and send the letters we prefill.", points: ["Exact steps for nine platforms and any other website", "Search removal from Google and Bing", "A legal letter for your country with its deadline"], href: "/platforms", cta: "See the platform guides" },
+  { title: "Prevent", body: "Fingerprint the images on your own device so partner platforms block re-uploads.", points: ["StopNCII for adults, Take It Down for under 18s", "The image never leaves your phone", "Partners include Facebook, Instagram, TikTok, Reddit, and Snapchat"], href: "/resources", cta: "See prevention tools" },
 ];
 
 export function StepsStack() {
@@ -43,6 +43,8 @@ export function StepsStack() {
             <div>
               <h2 className="text-3xl font-semibold tracking-tight">{s.title}</h2>
               <p className="mt-3 max-w-[55ch] text-lg text-muted">{s.body}</p>
+              <ul className="mt-5 flex flex-col gap-2 text-muted">{s.points.map((pt) => <li key={pt} className="flex gap-3"><span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" /><span>{pt}</span></li>)}</ul>
+              <a href={s.href} className="mt-6 inline-block font-medium text-accent underline">{s.cta}</a>
             </div>
           </div>
         </div>
