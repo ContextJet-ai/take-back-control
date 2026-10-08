@@ -45,3 +45,6 @@ next-env.d.ts
 
 # private outreach drafts and recipient research
 /outreach
+
+# local tool configuration
+/.claude

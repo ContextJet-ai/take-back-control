@@ -19,7 +19,7 @@ Facts established by research on 2026-10-06, each linked in the References secti
 
 **Verdict: BLOCKED as described. REDESIGN as a supporter partnership.**
 
-What kills it: StopNCII will not accept a hash from anyone but the person depicted, through their own site, and offers no API for that. The "government, so it should be available" assumption is wrong on both counts. Hashing locally is easy; submission is the whole problem.
+What kills it: StopNCII will not accept a hash from anyone but the person depicted, through their own site, and offers no API for that. StopNCII is run by a UK charity, not a government body, so there is no government API to request. Hashing locally is easy; submission is the whole problem.
 
 What survives: SWGfL lists supporters who signpost to StopNCII. Becoming a listed supporter gives credibility and a direct contact for escalations. The practical product change is a tighter hand-off: pre-explain the StopNCII flow screen by screen so the person arrives ready, and open it in a new tab from the plan.
 
@@ -35,7 +35,7 @@ Stress points: key derivation in the browser (WebCrypto PBKDF2 or Argon2 via WAS
 
 Alternative that keeps the promise: a local-only case file. Export an encrypted JSON file the person keeps, re-import to continue. No server. Covers 80 percent of the value (a record of what was sent where) without storing anything.
 
-Decision for you: server-side encrypted store, or local encrypted file. I recommend the local file first. It ships in days and does not change the privacy statement.
+Open decision: a server-side encrypted store, or a local encrypted file. Recommended: the local file first. It ships in days and does not change the privacy statement.
 
 ## 3. Automated takedown sending
 
@@ -105,7 +105,7 @@ Mechanically easy once a locale field exists. The blocker is review: machine tra
 
 **Verdict: BUILD LATER, after country packs, with hard guardrails. Design below.**
 
-Why it earns a place: the wizard handles the common cases in six questions, but people arrive with situations the wizard cannot branch on ("my ex has the photos on a laptop I still have access to", "the site is in Russian", "I am a teacher and a student came to me"). A grounded assistant that answers from our own content and routes to the right service is the one-stop-shop the user asked for.
+Why it earns a place: the wizard handles the common cases in six questions, but people arrive with situations the wizard cannot branch on ("my ex has the photos on a laptop I still have access to", "the site is in Russian", "I am a teacher and a student came to me"). A grounded assistant that answers from our own content and routes to the right service gives people one place to go for everything they need.
 
 What kills the naive version:
 

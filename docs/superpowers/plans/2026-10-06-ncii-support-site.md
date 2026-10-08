@@ -110,7 +110,7 @@ playwright.config.ts
 - [ ] **Step 1: Initialise repo and Next.js**
 
 ```bash
-cd "/Users/nishchaymahor/Documents/Work/misc/Working/idea 1"
+cd path/to/take-back-control
 git init
 npx --yes create-next-app@15 . --typescript --tailwind --app --no-src-dir --import-alias "@/*" --eslint --use-npm --yes
 ```
@@ -119,7 +119,7 @@ If `create-next-app` refuses because the directory is non-empty (the `docs/` fol
 
 ```bash
 npx --yes create-next-app@15 /tmp/ncii-scaffold --typescript --tailwind --app --no-src-dir --import-alias "@/*" --eslint --use-npm --yes
-cp -R /tmp/ncii-scaffold/. "/Users/nishchaymahor/Documents/Work/misc/Working/idea 1/"
+cp -R /tmp/ncii-scaffold/. path/to/take-back-control/
 ```
 
 - [ ] **Step 2: Install dependencies**
