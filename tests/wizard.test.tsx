@@ -116,3 +116,39 @@ describe("wizard guidance", () => {
     expect(screen.getByText(/has it been posted anywhere/i)).toBeTruthy();
   });
 });
+
+describe("hardening found by stress testing", () => {
+  async function finishAll() {
+    clearState();
+    const utils = render(<Wizard />);
+    fireEvent.click(screen.getByLabelText("An image")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("Yes")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("TikTok")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("No, someone else did")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("No")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("Prefer not to say"));
+    return utils;
+  }
+  it("ignores edits made in the instant after See my plan, so the plan is not bounced", async () => {
+    await finishAll();
+    fireEvent.click(screen.getByText("See my plan"));
+    expect(loadState()?.step).toBe(6);
+    fireEvent.change(screen.getByLabelText("Country"), { target: { value: "IN" } });
+    fireEvent.click(screen.getByText("Back"));
+    expect(loadState()?.step).toBe(6);
+    expect(loadState()?.answers.country).toBeNull();
+  });
+  it("caps the other-website link length", () => {
+    clearState();
+    render(<Wizard />);
+    fireEvent.click(screen.getByLabelText("An image")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("Yes")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.click(screen.getByLabelText("Another website"));
+    const input = screen.getByLabelText("Paste the link") as HTMLInputElement;
+    expect(input.getAttribute("maxlength")).toBe("2048");
+    fireEvent.change(input, { target: { value: "https://x.test/" + "a".repeat(3000) } });
+    fireEvent.click(screen.getByText("Next"));
+    expect(screen.getByText(/that link is too long/i)).toBeTruthy();
+    expect(screen.queryByText(/did you take the image/i)).toBeNull();
+  });
+});

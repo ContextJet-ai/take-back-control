@@ -78,3 +78,16 @@ for (const path of ["/", "/start", "/resources", "/evidence", "/about", "/platfo
     expect(covered, "text under quick exit").toEqual([]);
   });
 }
+
+for (const path of ["/", "/about", "/resources"]) {
+  test(`header and footer links are comfortable to tap on a phone at ${path}`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto(path);
+    const small = await page.evaluate(() =>
+      [...document.querySelectorAll("header a, footer a")]
+        .map((a) => ({ t: (a.getAttribute("aria-label") ?? a.textContent ?? "").trim().slice(0, 24), h: Math.round(a.getBoundingClientRect().height) }))
+        .filter((x) => x.h < 44),
+    );
+    expect(small, "links under 44px tall").toEqual([]);
+  });
+}

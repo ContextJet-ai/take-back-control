@@ -24,7 +24,7 @@ export function PlatformPicker({ selected, otherUrl, error, onToggle, onOtherUrl
       {selected.includes("other") && (
         <div className="flex flex-col gap-2">
           <label htmlFor="otherUrl" className="font-medium">Paste the link</label>
-          <input id="otherUrl" type="url" value={otherUrl} onChange={(e) => onOtherUrl(e.target.value)} className="rounded-card border border-border bg-bg px-4 py-3" placeholder="https://" aria-describedby={error ? "otherUrl-error" : undefined} />
+          <input id="otherUrl" type="url" maxLength={2048} value={otherUrl} onChange={(e) => onOtherUrl(e.target.value)} className="rounded-card border border-border bg-bg px-4 py-3" placeholder="https://" aria-describedby={error ? "otherUrl-error" : undefined} />
         </div>
       )}
       {error && <p id="otherUrl-error" role="alert" className="text-sm text-red-700 dark:text-red-400">{error}</p>}

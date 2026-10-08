@@ -9,6 +9,8 @@ import { Question } from "./question";
 import { PlatformPicker } from "./platform-picker";
 import { CountryPicker } from "./country-picker";
 
+const MAX_URL = 2048;
+
 type StepId = "contentType" | "posted" | "platforms" | "selfTaken" | "minor" | "country";
 
 const WHY: Record<StepId, string> = {
@@ -46,6 +48,7 @@ export function Wizard() {
   const isLast = index === steps.length - 1;
 
   const headingRef = useRef<HTMLDivElement>(null);
+  const submitted = useRef(false);
   const mounted = useRef(false);
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return; }
@@ -54,6 +57,7 @@ export function Wizard() {
   }, [index]);
 
   const set = <K extends keyof Answers>(k: K, v: Answers[K]) => {
+    if (submitted.current) return;
     setError(null);
     setAnswers((a) => { const nextAnswers = { ...a, [k]: v }; saveState({ step: index, answers: nextAnswers }); return nextAnswers; });
   };
@@ -65,6 +69,7 @@ export function Wizard() {
       case "platforms": {
         const sel = answers.platformSlugs ?? [];
         if (sel.length === 0) return "Choose at least one place.";
+        if (sel.includes("other") && (answers.otherUrl ?? "").length > MAX_URL) return "That link is too long. Paste the address of the page itself.";
         if (sel.includes("other") && !/^https?:\/\/\S+$/.test(answers.otherUrl ?? "")) return "Paste the full link, starting with https://";
         return null;
       }
@@ -75,6 +80,7 @@ export function Wizard() {
   }
 
   function next() {
+    if (submitted.current) return;
     const problem = validate();
     if (problem) { setError(problem); return; }
     if (isLast) {
@@ -83,6 +89,7 @@ export function Wizard() {
         platformSlugs: answers.platformSlugs ?? [], otherUrl: answers.otherUrl ?? "",
         selfTaken: answers.selfTaken!, minor: answers.minor!, country: answers.country ?? null,
       };
+      submitted.current = true;
       saveState({ step: 6, answers: full });
       router.push("/plan");
       return;
@@ -91,7 +98,7 @@ export function Wizard() {
     setIndex(ni); saveState({ step: ni, answers });
   }
 
-  function back() { if (index > 0) { setError(null); setIndex(index - 1); saveState({ step: index - 1, answers }); } }
+  function back() { if (submitted.current) return; if (index > 0) { setError(null); setIndex(index - 1); saveState({ step: index - 1, answers }); } }
 
   if (!restored) return <div className="mx-auto max-w-xl px-4 py-12 min-h-[60dvh]" aria-busy="true" />;
 
