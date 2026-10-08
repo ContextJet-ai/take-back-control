@@ -1,3 +1,4 @@
+import { PageBanner } from "@/components/page-banner";
 import { resourcesFor } from "@/content/resources";
 
 export const metadata = { title: "Resources" };
@@ -7,6 +8,7 @@ export default function ResourcesPage() {
   const groups = { prevention: "Stop it spreading", reporting: "Report", crisis: "Talk to someone", legal: "Legal help" } as const;
   return (
     <div className="mx-auto max-w-2xl px-4 py-16">
+      <PageBanner src="/images/generated/lighthouse-dawn.webp" priority />
       <h1 className="text-3xl font-semibold tracking-tight">Resources</h1>
       {(Object.keys(groups) as (keyof typeof groups)[]).map((k) => {
         const items = all.filter((r) => r.kind === k);

@@ -1,6 +1,6 @@
 {
-  "name": "ncii-scaffold",
-  "version": "0.1.0",
+  "name": "take-back-control",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "generate:images": "node scripts/generate-images.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -39,8 +40,13 @@
     "eslint-config-next": "15.5.27",
     "jsdom": "^29.1.1",
     "raw-loader": "^4.0.2",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^5.0.3"
+  },
+  "description": "Step-by-step help to get intimate images taken down. Nothing is uploaded, and no keys are needed to run it.",
+  "engines": {
+    "node": ">=20"
   }
 }

@@ -50,3 +50,35 @@ Generated locally with a script (teal tile grid). No third-party rights.
 ## Hero shader
 
 The animated light over the hero is generated live by a WebGL fragment shader in components/landing/shader-panel.tsx. No third-party rights.
+
+## images/generated/lighthouse-dawn.webp
+
+Used for: Resources page banner
+Generated with OpenAI gpt-image-2
+Date: 2026-10-08
+Prompt: scripts/image-prompts.json#lighthouse-dawn
+Rights: output of a text prompt, created for this project. No third-party source material.
+
+## images/generated/desk-window.webp
+
+Used for: Evidence log page banner
+Generated with OpenAI gpt-image-2
+Date: 2026-10-08
+Prompt: scripts/image-prompts.json#desk-window
+Rights: output of a text prompt, created for this project. No third-party source material.
+
+## images/generated/lantern-path.webp
+
+Used for: Page not found banner
+Generated with OpenAI gpt-image-2
+Date: 2026-10-08
+Prompt: scripts/image-prompts.json#lantern-path
+Rights: output of a text prompt, created for this project. No third-party source material.
+
+## images/generated/sapling-light.webp
+
+Used for: About page banner
+Generated with OpenAI gpt-image-2
+Date: 2026-10-08
+Prompt: scripts/image-prompts.json#sapling-light
+Rights: output of a text prompt, created for this project. No third-party source material.

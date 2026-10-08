@@ -1,0 +1,18 @@
+{
+  "lighthouse-dawn": {
+    "use": "Resources page banner",
+    "prompt": "A soft painted gouache illustration with gentle paper grain: a small lone lighthouse on a rocky headland at first light, warm amber glow breaking over a calm teal sea, thin mist, wide calm composition with generous empty sky. Palette of deep teal, sage, warm amber and cream. Hopeful and quiet. No people, no text, no logos, no watermarks."
+  },
+  "desk-window": {
+    "use": "Evidence log page banner",
+    "prompt": "A soft painted gouache illustration with gentle paper grain: an empty wooden desk beside an open window at dawn, a closed notebook, a pen, a cup and a small green plant, golden light falling across the table, a calm teal and sage room. Palette of deep teal, sage, warm amber and cream. Safe and orderly. No people, no text, no logos, no watermarks."
+  },
+  "lantern-path": {
+    "use": "Page not found banner",
+    "prompt": "A soft painted gouache illustration with gentle paper grain: a winding path across gentle hills as night turns to dawn, a single warm lantern glowing on a post beside the path, faint stars fading in a teal sky, a thin band of amber on the horizon. Palette of deep teal, sage, warm amber and cream. Gentle and reassuring. No people, no text, no logos, no watermarks."
+  },
+  "sapling-light": {
+    "use": "About page banner",
+    "prompt": "A soft painted gouache illustration with gentle paper grain: a small green sapling growing from dark soil, lit by one warm beam of morning light, softly blurred teal leaves behind it, wide composition with empty space to the right. Palette of deep teal, sage, warm amber and cream. Hopeful and still. No people, no text, no logos, no watermarks."
+  }
+}

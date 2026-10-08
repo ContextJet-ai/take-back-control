@@ -1,9 +1,11 @@
+import { PageBanner } from "@/components/page-banner";
 import { EvidenceBuilder } from "@/components/evidence/evidence-builder";
 import { NoUploadNotice } from "@/components/no-upload-notice";
 export const metadata = { title: "Evidence log" };
 export default function EvidencePage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
+      <PageBanner src="/images/generated/desk-window.webp" priority />
       <h1 className="text-3xl font-semibold tracking-tight">Build an evidence log</h1>
       <p className="mt-2 max-w-[65ch] text-muted">Police, lawyers, and platforms all ask for the same things: where it was, who posted it, when you saw it, and a fingerprint that shows the files have not been altered since you made the log. This page makes that record.</p>
       <div className="mt-4"><NoUploadNotice /></div>
