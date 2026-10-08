@@ -31,13 +31,18 @@ void main(){
   gl_FragColor=vec4(col,1.0);
 }`;
 
-function cssColor(name: string, fallback: string): [number, number, number] {
-  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+function hexToRgb(v: string): [number, number, number] {
   const hex = v.replace("#", "").slice(0, 6);
   return [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as [number, number, number];
 }
+function cssColor(name: string, fallback: string): [number, number, number] {
+  return hexToRgb(getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback);
+}
 
-export function ShaderPanel({ className = "" }: { className?: string }) {
+// Neutral mid grey leaves the photo untouched under soft-light; white and warm cream lift it.
+const OVERLAY_COLORS: [string, string, string] = ["#808080", "#ffffff", "#ffe6b0"];
+
+export function ShaderPanel({ className = "", overlay = false }: { className?: string; overlay?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const [failed, setFailed] = useState(false);
 
@@ -56,9 +61,12 @@ export function ShaderPanel({ className = "" }: { className?: string }) {
     const pos = gl.getAttribLocation(prog, "position"); gl.enableVertexAttribArray(pos); gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
     const uRes = gl.getUniformLocation(prog, "u_res"), uTime = gl.getUniformLocation(prog, "u_time");
     const setColors = () => {
-      gl.uniform3fv(gl.getUniformLocation(prog, "u_a"), cssColor("--shader-a", "#0f3f3c"));
-      gl.uniform3fv(gl.getUniformLocation(prog, "u_b"), cssColor("--shader-b", "#45aaa3"));
-      gl.uniform3fv(gl.getUniformLocation(prog, "u_c"), cssColor("--shader-c", "#e9d8b4"));
+      const [a, b, c] = overlay
+        ? OVERLAY_COLORS.map(hexToRgb)
+        : [cssColor("--shader-a", "#0f3f3c"), cssColor("--shader-b", "#45aaa3"), cssColor("--shader-c", "#e9d8b4")];
+      gl.uniform3fv(gl.getUniformLocation(prog, "u_a"), a);
+      gl.uniform3fv(gl.getUniformLocation(prog, "u_b"), b);
+      gl.uniform3fv(gl.getUniformLocation(prog, "u_c"), c);
     };
     setColors();
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -71,8 +79,9 @@ export function ShaderPanel({ className = "" }: { className?: string }) {
     mq.addEventListener("change", onTheme); window.addEventListener("resize", resize);
     frame();
     return () => { cancelAnimationFrame(raf); io.disconnect(); mq.removeEventListener("change", onTheme); window.removeEventListener("resize", resize); gl.getExtension("WEBGL_lose_context")?.loseContext(); };
-  }, []);
+  }, [overlay]);
 
+  if (failed && overlay) return null;
   if (failed) return <div className={`bg-[radial-gradient(120%_90%_at_30%_20%,var(--shader-b),var(--shader-a)_70%)] ${className}`} aria-hidden="true" />;
-  return <canvas ref={ref} className={`block h-full w-full ${className}`} aria-hidden="true" />;
+  return <canvas ref={ref} className={`block h-full w-full ${overlay ? "pointer-events-none mix-blend-soft-light opacity-80" : ""} ${className}`} aria-hidden="true" />;
 }

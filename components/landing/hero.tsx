@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ShaderPanel } from "./shader-panel";
 import { Button } from "@/components/button";
 
@@ -13,7 +14,8 @@ export function Hero() {
         </div>
       </div>
       <div className="relative aspect-[4/5] overflow-hidden rounded-card border border-border md:aspect-auto md:h-full">
-        <ShaderPanel className="absolute inset-0" />
+        <Image src="/images/hero-dawn.webp" alt="" fill priority fetchPriority="high" sizes="(min-width: 768px) 45vw, 100vw" className="object-cover dark:brightness-90" />
+        <ShaderPanel overlay className="absolute inset-0" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 p-6 text-sm text-fg/80 md:p-8">
           <p className="max-w-[28ch] rounded-card bg-bg/70 px-3 py-2 backdrop-blur">Your images never leave your device. A fingerprint does the work.</p>
         </div>
