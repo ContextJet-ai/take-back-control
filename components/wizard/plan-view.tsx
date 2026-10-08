@@ -9,7 +9,7 @@ import { DoneToggle } from "./done-toggle";
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
-    <section id={id} className="flex scroll-mt-40 flex-col gap-4 pt-8">
+    <section id={id} className="flex scroll-mt-56 flex-col gap-4 pt-8 sm:scroll-mt-40">
       <span className="block h-0.5 w-8 rounded-full bg-accent" aria-hidden="true" />
       <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
       {children}
@@ -46,7 +46,7 @@ export function PlanView({ plan }: { plan: Plan }) {
         <p className="mt-2 text-muted">Work through it top to bottom. Tick things off as you go. Your progress is kept on this device until you close the tab.</p>
       </header>
 
-      <div className="sticky top-16 z-20 -mx-4 border-b border-border bg-bg/95 px-4 py-3 backdrop-blur">
+      <div className="sticky top-[6.5rem] z-20 -mx-4 border-b border-border bg-bg/95 px-4 py-3 backdrop-blur sm:top-16">
         <p role="status" className="text-sm font-medium">{doneCount} of {ids.length} done</p>
         <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-border" aria-hidden="true">
           <div className="h-full rounded-full bg-accent" style={{ width: ids.length ? `${Math.round((doneCount / ids.length) * 100)}%` : "0%" }} />

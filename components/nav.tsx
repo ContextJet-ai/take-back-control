@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ShieldCheck } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "./button";
+import { QuickExitBar } from "./quick-exit";
 
 export function Nav() {
   return (
@@ -17,6 +18,7 @@ export function Nav() {
           <Button href="/start" className="px-4 py-2 text-sm">Start</Button>
         </div>
       </nav>
+      <QuickExitBar />
     </header>
   );
 }

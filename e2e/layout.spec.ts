@@ -54,3 +54,27 @@ test("option cards show a visible focus ring from the keyboard", async ({ page }
   expect(style.style).not.toBe("none");
   expect(parseFloat(style.width)).toBeGreaterThan(0);
 });
+
+for (const path of ["/", "/start", "/resources", "/evidence", "/about", "/platforms"]) {
+  test(`quick exit covers no content on a phone at ${path}`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto(path);
+    await page.waitForTimeout(1500);
+    const exit = page.getByRole("button", { name: /quick exit/i });
+    await expect(exit).toBeVisible();
+    const covered = await page.evaluate(() => {
+      const btn = [...document.querySelectorAll("button")].find((b) => /quick exit/i.test(b.getAttribute("aria-label") ?? b.textContent ?? "") && b.getClientRects().length > 0)!;
+      const r = btn.getBoundingClientRect();
+      const hits: string[] = [];
+      for (const el of document.querySelectorAll("main h1, main h2, main p, main li, main a, main label, main legend, main span")) {
+        if (btn.contains(el) || !(el.textContent ?? "").trim() || el.children.length > 2) continue;
+        const b = el.getBoundingClientRect();
+        if (b.width === 0 || b.height === 0) continue;
+        const overlap = !(b.right <= r.left || b.left >= r.right || b.bottom <= r.top || b.top >= r.bottom);
+        if (overlap) hits.push((el.textContent ?? "").trim().slice(0, 40));
+      }
+      return hits;
+    });
+    expect(covered, "text under quick exit").toEqual([]);
+  });
+}
