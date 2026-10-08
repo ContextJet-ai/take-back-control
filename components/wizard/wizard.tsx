@@ -11,6 +11,15 @@ import { CountryPicker } from "./country-picker";
 
 type StepId = "contentType" | "posted" | "platforms" | "selfTaken" | "minor" | "country";
 
+const WHY: Record<StepId, string> = {
+  contentType: "The steps differ for an image, a video, and a threat. A threat means nothing is posted yet, so the plan focuses on what to do before it spreads.",
+  posted: "If something is already posted, we show you where to report it. If not, we skip those steps and focus on prevention and evidence.",
+  platforms: "Each platform has its own report form and timing. Choose every place you know about. You can start again to add more.",
+  selfTaken: "If you took the image yourself you also hold the copyright, which gives you an extra legal route to removal. It changes nothing else.",
+  minor: "Anyone under 18 gets a plan built around child-protection services and clear safety steps. An image from your teens counts, even if you are an adult now.",
+  country: "Laws and deadlines differ by country. We use this only to show local rules and helplines. You can skip it.",
+};
+
 function stepsFor(a: Partial<Answers>): StepId[] {
   const posted = a.posted === "yes" || a.posted === "unsure";
   return ["contentType", "posted", ...(posted ? (["platforms"] as StepId[]) : []), "selfTaken", "minor", "country"];
@@ -86,9 +95,18 @@ export function Wizard() {
 
   if (!restored) return <div className="mx-auto max-w-xl px-4 py-12 min-h-[60dvh]" aria-busy="true" />;
 
+  function onKeyDown(e: React.KeyboardEvent) {
+    if (e.key !== "Enter" || e.shiftKey) return;
+    const tag = (e.target as HTMLElement).tagName;
+    if (["BUTTON", "A", "SUMMARY", "TEXTAREA", "SELECT"].includes(tag)) return;
+    e.preventDefault();
+    next();
+  }
+
   return (
-    <div key={step} ref={headingRef} className="mx-auto flex max-w-xl flex-col gap-6 px-4 pb-28 pt-12 motion-safe:animate-[rise_200ms_ease-out]">
+    <div key={step} ref={headingRef} onKeyDown={onKeyDown} className="mx-auto flex max-w-xl flex-col gap-6 px-4 pb-28 pt-12 motion-safe:animate-[rise_200ms_ease-out]">
       <Progress step={index + 1} total={steps.length} />
+      <p className="-mt-3 text-xs text-muted">Your answers are kept on this device only, until you close the tab.</p>
       {step === "contentType" && (
         <Question title="What was shared, or threatened?" name="contentType" value={answers.contentType}
           onChange={(v) => set("contentType", v)}
@@ -120,6 +138,10 @@ export function Wizard() {
       {step === "country" && (
         <CountryPicker value={answers.country} onChange={(v) => set("country", v)} />
       )}
+      <details className="rounded-card border border-border bg-surface-solid px-4 py-3 text-sm">
+        <summary className="cursor-pointer font-medium">Why we ask this</summary>
+        <p className="mt-2 text-muted">{WHY[step]}</p>
+      </details>
       {error && step !== "platforms" && <p role="alert" className="text-sm text-red-700 dark:text-red-400">{error}</p>}
       <div className="sticky bottom-0 -mx-4 flex items-center justify-between gap-3 border-t border-border bg-bg/95 px-4 py-3 backdrop-blur [padding-bottom:max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:pt-4 sm:backdrop-blur-none">
         <Button variant="secondary" onClick={back} disabled={index === 0} className="min-h-[44px]">Back</Button>

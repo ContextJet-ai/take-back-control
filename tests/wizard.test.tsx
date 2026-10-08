@@ -77,3 +77,42 @@ describe("option accessibility", () => {
     expect(document.getElementById(input.getAttribute("aria-describedby")!)?.textContent).toMatch(/nothing has been posted yet/i);
   });
 });
+
+describe("wizard guidance", () => {
+  it("explains why each question is asked, without hiding the question", () => {
+    clearState();
+    render(<Wizard />);
+    const note = screen.getByText(/why we ask this/i);
+    expect(note.closest("details")).toBeTruthy();
+    expect(note.closest("details")!.textContent).toMatch(/threat/i);
+    fireEvent.click(screen.getByLabelText("An image")); fireEvent.click(screen.getByText("Next"));
+    expect(screen.getByText(/why we ask this/i).closest("details")!.textContent).toMatch(/already posted/i);
+  });
+  it("tells people where their answers are kept", () => {
+    clearState();
+    render(<Wizard />);
+    expect(screen.getByText(/kept on this device/i)).toBeTruthy();
+  });
+  it("Enter on a chosen option moves to the next question", () => {
+    clearState();
+    render(<Wizard />);
+    const radio = screen.getByLabelText("An image");
+    fireEvent.click(radio);
+    fireEvent.keyDown(radio, { key: "Enter" });
+    expect(screen.getByText(/has it been posted anywhere/i)).toBeTruthy();
+  });
+  it("Enter without a choice shows the prompt instead of skipping", () => {
+    clearState();
+    render(<Wizard />);
+    fireEvent.keyDown(screen.getByLabelText("An image"), { key: "Enter" });
+    expect(screen.getByText(/choose an option to continue/i)).toBeTruthy();
+    expect(screen.queryByText(/has it been posted anywhere/i)).toBeNull();
+  });
+  it("Enter on the Back button does not advance", () => {
+    clearState();
+    render(<Wizard />);
+    fireEvent.click(screen.getByLabelText("An image")); fireEvent.click(screen.getByText("Next"));
+    fireEvent.keyDown(screen.getByText("Back"), { key: "Enter" });
+    expect(screen.getByText(/has it been posted anywhere/i)).toBeTruthy();
+  });
+});

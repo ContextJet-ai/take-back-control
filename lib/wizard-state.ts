@@ -1,4 +1,5 @@
 import type { Answers } from "@/lib/plan";
+import { clearProgress } from "@/lib/progress";
 
 export interface WizardState { step: number; answers: Partial<Answers> }
 const KEY = "wizard";
@@ -24,6 +25,7 @@ export function loadState(): WizardState | null {
 
 export function clearState(): void {
   memory = null;
+  clearProgress();
   try { sessionStorage.removeItem(KEY); } catch { /* ignore */ }
 }
 
